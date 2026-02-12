@@ -42,26 +42,35 @@ show_help() {
     cat << 'HELP'
 Usage: ./run-tests.sh [test-type] [options]
 
-Test Types:
-  all                 - Run all tests
-  smoke               - Run smoke tests only
-  plugin              - Run WordPress plugin tests only
-  headed              - Run tests in headed mode (visible browser)
-  debug               - Run tests in debug mode
+Test Types (SINGLE BROWSER - FASTER):
+  single              - Run all tests on Chrome only (FASTEST)
+  smoke:single        - Run smoke tests on Chrome only
+  plugin:single       - Run plugin tests on Chrome only
+
+Test Types (MULTIPLE BROWSERS - COMPREHENSIVE):
+  all                 - Run all tests on Chrome, Firefox, Safari (DEFAULT)
+  smoke               - Run smoke tests on all browsers
+  plugin              - Run plugin tests on all browsers
+  headed              - Run tests in headed mode (Chrome only, visible browser)
+  debug               - Run tests in debug mode (Chrome only)
+
+Single Browser Options:
   chrome              - Run tests on Chrome only
   firefox             - Run tests on Firefox only
   webkit              - Run tests on Safari only
 
-Options:
+Global Options:
   --help              - Show this help message
   --report            - Show test report after completion
   --no-parallel       - Run tests sequentially (slower)
 
 Examples:
-  ./run-tests.sh smoke
-  ./run-tests.sh plugin --headed
-  ./run-tests.sh all --report
-  ./run-tests.sh chrome --no-parallel
+  ./run-tests.sh single              (All tests, Chrome only, FASTEST)
+  ./run-tests.sh plugin:single       (Plugin tests, Chrome only)
+  ./run-tests.sh all                 (All tests, all browsers, COMPREHENSIVE)
+  ./run-tests.sh smoke               (Smoke tests, all browsers)
+  ./run-tests.sh headed              (Watch in browser)
+  ./run-tests.sh plugin:single --report  (Plugin tests, Chrome, show report)
 
 HELP
 }
@@ -72,24 +81,36 @@ run_tests() {
     local extra_args=""
     
     case "$test_type" in
+        single)
+            echo -e "${BLUE}Running ALL tests on CHROME ONLY (FASTEST)...${NC}\n"
+            npm run test:single
+            ;;
+        smoke:single)
+            echo -e "${BLUE}Running SMOKE tests on CHROME ONLY...${NC}\n"
+            npm run test:smoke:single
+            ;;
+        plugin:single)
+            echo -e "${BLUE}Running WORDPRESS PLUGIN tests on CHROME ONLY...${NC}\n"
+            npm run test:wordpress-plugin:single
+            ;;
         all)
-            echo -e "${BLUE}Running ALL tests...${NC}\n"
-            npm run test
+            echo -e "${BLUE}Running ALL tests on ALL BROWSERS (Chrome, Firefox, Safari)...${NC}\n"
+            npm run test:multi
             ;;
         smoke)
-            echo -e "${BLUE}Running SMOKE tests...${NC}\n"
+            echo -e "${BLUE}Running SMOKE tests on ALL BROWSERS...${NC}\n"
             npm run test:smoke
             ;;
         plugin)
-            echo -e "${BLUE}Running WORDPRESS PLUGIN tests...${NC}\n"
+            echo -e "${BLUE}Running WORDPRESS PLUGIN tests on ALL BROWSERS...${NC}\n"
             npm run test:wordpress-plugin
             ;;
         headed)
-            echo -e "${BLUE}Running tests in HEADED mode...${NC}\n"
-            npm run test:headed
+            echo -e "${BLUE}Running tests in HEADED mode (Chrome only, VISIBLE)...${NC}\n"
+            npm run test:headed:single
             ;;
         debug)
-            echo -e "${BLUE}Running tests in DEBUG mode...${NC}\n"
+            echo -e "${BLUE}Running tests in DEBUG mode (Chrome only)...${NC}\n"
             npm run test:debug
             ;;
         chrome)
