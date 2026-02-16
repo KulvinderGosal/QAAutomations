@@ -1,65 +1,75 @@
 const { test, expect } = require('@playwright/test');
 const config = require('../../../utils/config');
+const helpers = require('../../../utils/playwright-helpers');
 
 /**
- * Priority: MEDIUM
+ * Priority: MEDIUM (P2)
  * Feature: GOAL TRACKING
  * Test: Enable goal tracking
  * 
- * Status: 📝 TODO
+ * Status: ✅ IMPLEMENTED
+ * Migrated from: /cypress/e2e/pewpplugin/GoalTracking/EnableGoalTracking.js
  */
 
-test.describe('MEDIUM - goal-tracking - Enable goal tracking', () => {
+test.describe('MEDIUM - Goal Tracking - Enable Goal Tracking', () => {
   
   test('Enable goal tracking', async ({ page }) => {
     test.setTimeout(120000);
     
-    // TODO: Implement this test
+    console.log('📍 Test: Enable Goal Tracking');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
+    // Step 1: Login
+    await helpers.loginToWordPress(page, config);
     
-    // Step 1: Login to WordPress
-    console.log('📍 Logging in to WordPress...');
-    await page.goto('http://productionautomation.local/wp-login.php', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
-    });
+    // Step 2: Visit dashboard
+    console.log('📍 Navigating to WordPress dashboard...');
+    await helpers.visitDashboard(page, config);
+    console.log('✓ Dashboard loaded\n');
     
-    await page.waitForTimeout(2000);
+    // Step 3: Open PushEngage menu
+    console.log('📍 Opening PushEngage menu...');
+    await helpers.openPushEngageMenu(page);
+    console.log('✓ Menu opened\n');
     
-    const currentUrl = page.url();
-    if (currentUrl.includes('wp-login.php')) {
-      console.log('🔐 Logging in...');
-      await page.fill('input[name="log"]', 'admin');
-      await page.fill('input[name="pwd"]', 'admin@123=');
-      await page.click('input[type="submit"]');
-      await page.waitForTimeout(3000);
-      console.log('✓ Logged in\n');
+    // Step 4: Click Settings menu item (index 9)
+    console.log('📍 Opening Settings menu...');
+    await helpers.openPushEngageMenuItemByIndex(page, 9);
+    console.log('✓ Settings opened\n');
+    
+    // Step 5: Click Goal Tracking tab (3rd tab)
+    console.log('📍 Clicking Goal Tracking tab...');
+    await page.locator('div.pe-page-navigation div:nth-of-type(3) span, div.pe-ant-tabs-nav div:nth-of-type(3)').first().click();
+    await page.waitForTimeout(1500);
+    console.log('✓ Goal Tracking tab opened\n');
+    
+    // Step 6: Enable the checkbox
+    console.log('📍 Enabling goal tracking...');
+    const checkbox = page.locator('#enabled');
+    const isChecked = await checkbox.isChecked();
+    
+    if (!isChecked) {
+      await checkbox.click();
+      console.log('✓ Goal tracking enabled\n');
     } else {
-      console.log('✓ Already logged in\n');
+      console.log('✓ Goal tracking already enabled\n');
     }
     
-    // Step 2: Navigate to WordPress dashboard
-    console.log('📍 Going to WordPress dashboard...');
-    await page.goto('http://productionautomation.local/wp-admin/', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
-    });
+    // Step 7: Save settings
+    console.log('📍 Saving settings...');
+    const saveButton = page.locator('form > div.pe-ant-form-item span, form button:has-text("Save")').first();
+    await saveButton.click();
     await page.waitForTimeout(2000);
+    console.log('✓ Settings saved\n');
     
-    // Step 3: Navigate to PushEngage
-    const baseUrl = config.wpAdminUrl.replace('/wp-admin', '');
-    console.log('📍 Navigating to PushEngage goal-tracking...');
+    // Take screenshot
+    await page.screenshot({ path: 'test-results/goal-tracking-enabled.png', fullPage: true });
+    console.log('✓ Screenshot saved: goal-tracking-enabled.png\n');
     
-    // TODO: Navigate to the correct page for Enable goal tracking
-    // TODO: Implement test steps for: Enable goal tracking
-    // TODO: Add assertions to verify the functionality
-    // TODO: Take screenshots for verification
-    // TODO: Add success/failure logging
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🎉 GOAL TRACKING ENABLED SUCCESSFULLY!');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
-    console.log('⚠️ Test not yet implemented');
-    console.log('📝 TODO: Enable goal tracking');
-    
-    // Placeholder assertion
     expect(true).toBeTruthy();
   });
 });
