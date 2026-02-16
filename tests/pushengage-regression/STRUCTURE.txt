@@ -1,0 +1,146 @@
+PushEngage Regression Test Suite Structure
+==========================================
+
+tests/pushengage-regression/
+│
+├── README.md                        # Main documentation
+├── STRUCTURE.txt                    # This file
+│
+├── critical/                        # P0 - MUST PASS TESTS (27 tests)
+│   ├── README.md
+│   ├── smoke/                       # 5 tests - ✅ READY
+│   │   ├── 01-wordpress-login.spec.js
+│   │   ├── 02-dashboard-load.spec.js
+│   │   ├── 03-pushengage-menu-visible.spec.js
+│   │   ├── 04-pushengage-menu-click.spec.js
+│   │   └── 05-frontend-reachable.spec.js
+│   │
+│   ├── push-broadcasts/             # 13 tests - ✅ 1 DONE, 12 TODO
+│   │   ├── 01-send-immediate-broadcast.spec.js ✅
+│   │   ├── 02-schedule-future-broadcast.spec.js
+│   │   ├── 03-create-recurring-broadcast.spec.js
+│   │   ├── 04-ab-test-broadcast.spec.js
+│   │   ├── 05-send-to-segment.spec.js
+│   │   ├── 06-send-to-audience-group.spec.js
+│   │   ├── 07-duplicate-broadcast.spec.js
+│   │   ├── 08-export-broadcast.spec.js
+│   │   ├── 09-view-broadcast-analytics.spec.js
+│   │   ├── 10-edit-draft-broadcast.spec.js
+│   │   ├── 11-delete-broadcast.spec.js
+│   │   ├── 12-broadcast-history.spec.js
+│   │   └── 13-resend-broadcast.spec.js
+│   │
+│   └── settings-core/               # 9 tests - 📝 TEMPLATES
+│       ├── 01-connect-site.spec.js
+│       ├── 02-disconnect-site.spec.js
+│       ├── 03-dashboard-signin.spec.js
+│       ├── 04-enable-auto-push.spec.js
+│       ├── 05-disable-auto-push.spec.js
+│       ├── 06-configure-post-types.spec.js
+│       ├── 07-use-site-icon.spec.js
+│       ├── 08-upload-notification-icon.spec.js
+│       └── 09-save-settings.spec.js
+│
+├── high/                            # P1 - IMPORTANT FEATURES (29 tests)
+│   ├── README.md
+│   ├── drip-campaigns/              # 6 tests - 📝 TEMPLATES
+│   │   ├── 01-create-basic-drip.spec.js
+│   │   ├── 02-create-drip-for-audience.spec.js
+│   │   ├── 03-duplicate-drip.spec.js
+│   │   ├── 04-edit-drip.spec.js
+│   │   ├── 05-export-drip.spec.js
+│   │   └── 06-delete-drip.spec.js
+│   │
+│   ├── triggers/                    # 11 tests - 📝 TEMPLATES
+│   │   ├── 01-create-custom-trigger.spec.js
+│   │   ├── 02-create-inventory-trigger.spec.js
+│   │   ├── 03-create-price-drop-trigger.spec.js
+│   │   ├── 04-create-cart-abandonment-trigger.spec.js
+│   │   ├── 05-edit-trigger.spec.js
+│   │   ├── 06-add-notification-to-trigger.spec.js
+│   │   ├── 07-export-trigger.spec.js
+│   │   ├── 08-duplicate-trigger.spec.js
+│   │   ├── 09-disable-trigger.spec.js
+│   │   ├── 10-enable-trigger.spec.js
+│   │   └── 11-delete-trigger.spec.js
+│   │
+│   ├── audience/                    # 4 tests - 📝 TEMPLATES
+│   │   ├── 01-create-segment.spec.js
+│   │   ├── 02-delete-segment.spec.js
+│   │   ├── 03-create-audience-group.spec.js
+│   │   └── 04-delete-audience-group.spec.js
+│   │
+│   └── woocommerce-core/            # 8 tests - 📝 TEMPLATES
+│       ├── 01-new-order-notification.spec.js
+│       ├── 02-cancelled-order-notification.spec.js
+│       ├── 03-failed-order-notification.spec.js
+│       ├── 04-pending-order-notification.spec.js
+│       ├── 05-processing-order-notification.spec.js
+│       ├── 06-onhold-order-notification.spec.js
+│       ├── 07-completed-order-notification.spec.js
+│       └── 08-refunded-order-notification.spec.js
+│
+├── medium/                          # P2 - STANDARD FEATURES (14 tests)
+│   ├── README.md
+│   ├── click-to-chat/               # 4 tests - 📝 TEMPLATES
+│   │   ├── 01-enable-click-to-chat.spec.js
+│   │   ├── 02-disable-click-to-chat.spec.js
+│   │   ├── 03-configure-chat-style.spec.js
+│   │   └── 04-verify-frontend-widget.spec.js
+│   │
+│   ├── whatsapp/                    # 5 tests - 📝 TEMPLATES
+│   │   ├── 01-configure-whatsapp-settings.spec.js
+│   │   ├── 02-configure-whatsapp-cloud.spec.js
+│   │   ├── 03-enable-whatsapp-notifications.spec.js
+│   │   ├── 04-configure-whatsapp-templates.spec.js
+│   │   └── 05-test-whatsapp-integration.spec.js
+│   │
+│   ├── goal-tracking/               # 2 tests - 📝 TEMPLATES
+│   │   ├── 01-enable-goal-tracking.spec.js
+│   │   └── 02-disable-goal-tracking.spec.js
+│   │
+│   └── woocommerce-templates/       # 3 tests - 📝 TEMPLATES
+│       ├── 01-order-templates-overview.spec.js
+│       ├── 02-enable-template-notifications.spec.js
+│       └── 03-disable-template-notifications.spec.js
+│
+└── low/                             # P3 - NICE TO HAVE (1 test)
+    ├── README.md
+    └── about-us/                    # 1 test - 📝 TEMPLATE
+        └── 01-verify-documentation-links.spec.js
+
+STATISTICS
+==========
+Total Test Files: 71
+├── Critical (P0): 27 tests
+│   ├── Implemented: 6 tests (22%)
+│   └── Templates: 21 tests (78%)
+├── High (P1): 29 tests (0% implemented)
+├── Medium (P2): 14 tests (0% implemented)
+└── Low (P3): 1 test (0% implemented)
+
+Overall Progress: 6/71 (8%)
+
+QUICK COMMANDS
+==============
+# Run all broadcast tests
+npm run test:regression:broadcasts
+
+# Run all critical tests
+npm run test:regression:critical
+
+# Run all tests
+npm run test:regression:all
+
+# Generate test templates
+npm run generate:tests
+
+# Run specific priority
+npm run test:regression:high
+npm run test:regression:medium
+npm run test:regression:low
+
+LEGEND
+======
+✅ = Fully implemented and working
+📝 = Template ready, needs implementation
