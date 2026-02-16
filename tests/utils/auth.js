@@ -6,7 +6,9 @@ const config = require('./config');
  */
 async function loginToWordPress(page) {
   try {
-    console.log('🔐 Logging into WordPress admin...');
+    console.log(`🔐 Logging into WordPress admin (${config.environment})...`);
+    console.log(`   URL: ${config.wpAdminUrl}`);
+    console.log(`   User: ${config.wpUsername}`);
     
     // Step 1: Go to /wp-admin/ (WordPress standard admin URL)
     // WordPress automatically redirects /admin/ to /wp-admin/
