@@ -52,7 +52,7 @@ jobs:
       
       - name: 📊 Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.browser }}
           path: test-results/
@@ -60,7 +60,7 @@ jobs:
       
       - name: 📹 Upload test videos
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-videos-${{ matrix.browser }}
           path: test-results/videos/
@@ -68,7 +68,7 @@ jobs:
       
       - name: 📸 Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-screenshots-${{ matrix.browser }}
           path: test-results/screenshots/
@@ -111,7 +111,7 @@ jobs:
       
       - name: 📊 Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plugin-test-results
           path: test-results/
@@ -125,7 +125,10 @@ jobs:
     
     steps:
       - name: 📥 Download all test results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*test-results*'
+          merge-multiple: true
       
       - name: 📝 Comment on PR with results
         if: github.event_name == 'pull_request'
