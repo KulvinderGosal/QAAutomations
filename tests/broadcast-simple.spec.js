@@ -1,5 +1,10 @@
 const { test } = require('@playwright/test');
 
+// Force tests to run one at a time
+test.describe.configure({ mode: 'serial' });
+
+test.describe('Push Broadcast Tests', () => {
+
 test('Send Immediate Broadcast', async ({ page }) => {
   
   // 1. Login
