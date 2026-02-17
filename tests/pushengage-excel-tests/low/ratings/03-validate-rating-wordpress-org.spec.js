@@ -27,7 +27,7 @@ test.describe('LOW - Ratings - Validate - Rating - WordPress.org', () => {
     // 3) Click WordPress.org
     
     // Expected Result:
-    // Clicking WordPress.org should take a merchant PushEngage plugin's rating page to WordPress.org 
+    // Clicking WordPress.org should take a merchant PushEngage plugin\'s rating page to WordPress.org 
     
     // Step 1: Login to WordPress
     await helpers.loginToWordPress(page, config);

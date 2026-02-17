@@ -14,19 +14,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Enable Use post featured image
-
-', () => {
+test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Enable Use post featured image', () => {
   
-  test('Validate - AutoPush Settings - Enable Use post featured image
-
-', async ({ page }) => {
+  test('Validate - AutoPush Settings - Enable Use post featured image', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG927');
-    console.log('📍 Test: Validate - AutoPush Settings - Enable Use post featured image
-
-');
+    console.log('📍 Test: Validate - AutoPush Settings - Enable Use post featured image');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

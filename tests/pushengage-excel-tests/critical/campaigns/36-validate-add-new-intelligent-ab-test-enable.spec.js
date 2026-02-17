@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Campaigns - Validate - Add new - Intelligent AB Test - Enable
-', () => {
+test.describe('CRITICAL - Campaigns - Validate - Add new - Intelligent AB Test - Enable', () => {
   
-  test('Validate - Add new - Intelligent AB Test - Enable
-', async ({ page }) => {
+  test('Validate - Add new - Intelligent AB Test - Enable', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG336');
-    console.log('📍 Test: Validate - Add new - Intelligent AB Test - Enable
-');
+    console.log('📍 Test: Validate - Add new - Intelligent AB Test - Enable');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

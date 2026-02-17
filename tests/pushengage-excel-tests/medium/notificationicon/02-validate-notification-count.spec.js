@@ -12,13 +12,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('MEDIUM - NotificationIcon - Validate - Notification count ', () => {
+test.describe('MEDIUM - NotificationIcon - Validate - Notification count', () => {
   
-  test('Validate - Notification count ', async ({ page }) => {
+  test('Validate - Notification count', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG1002');
-    console.log('📍 Test: Validate - Notification count ');
+    console.log('📍 Test: Validate - Notification count');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

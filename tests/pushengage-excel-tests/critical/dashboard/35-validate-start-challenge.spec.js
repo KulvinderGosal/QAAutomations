@@ -30,7 +30,7 @@ test.describe('CRITICAL - Dashboard - Validate - Start Challenge', () => {
     // Expected Result:
     // After connecting to a site, on Dashboard merchant should see a Start Challenge banner to finish his setup. The following elements should be present on Start Challenge modal:
     // 1) Description - Finish the challenge and see what else you can do with PushEngage
-    // Don't miss out on leveraging the power of web push notifications.
+    // Don\'t miss out on leveraging the power of web push notifications.
     // 2) Setup Auto Sending, Configure Subscription Popup, Enable Welcome Drip Campaign, Create Your First Campaign checkboxes 
     // 3) Start Challenge button
     // 4) Avtar

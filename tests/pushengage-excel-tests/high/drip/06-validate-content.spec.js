@@ -12,13 +12,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('HIGH - Drip - Validate - Content ', () => {
+test.describe('HIGH - Drip - Validate - Content', () => {
   
-  test('Validate - Content ', async ({ page }) => {
+  test('Validate - Content', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG406');
-    console.log('📍 Test: Validate - Content ');
+    console.log('📍 Test: Validate - Content');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

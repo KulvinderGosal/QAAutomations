@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - Settings - Default Settings - Default Expiry for notifications
-', () => {
+test.describe('CRITICAL - Settings - Validate - Settings - Default Settings - Default Expiry for notifications', () => {
   
-  test('Validate - Settings - Default Settings - Default Expiry for notifications
-', async ({ page }) => {
+  test('Validate - Settings - Default Settings - Default Expiry for notifications', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG934');
-    console.log('📍 Test: Validate - Settings - Default Settings - Default Expiry for notifications
-');
+    console.log('📍 Test: Validate - Settings - Default Settings - Default Expiry for notifications');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

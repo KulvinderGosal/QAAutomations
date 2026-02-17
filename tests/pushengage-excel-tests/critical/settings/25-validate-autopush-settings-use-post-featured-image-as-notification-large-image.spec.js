@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Use post featured image as notification large image
-', () => {
+test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Use post featured image as notification large image', () => {
   
-  test('Validate - AutoPush Settings - Use post featured image as notification large image
-', async ({ page }) => {
+  test('Validate - AutoPush Settings - Use post featured image as notification large image', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG925');
-    console.log('📍 Test: Validate - AutoPush Settings - Use post featured image as notification large image
-');
+    console.log('📍 Test: Validate - AutoPush Settings - Use post featured image as notification large image');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:
@@ -35,7 +32,7 @@ test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Use post fea
     
     // Expected Result:
     // When Use post featured image as notification large image
-    // checkbox is checked, post's large image should be used as notification large image
+    // checkbox is checked, post\'s large image should be used as notification large image
     
     // Step 1: Login to WordPress
     await helpers.loginToWordPress(page, config);

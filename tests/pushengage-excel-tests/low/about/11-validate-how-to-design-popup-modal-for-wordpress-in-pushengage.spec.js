@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('LOW - About - Validate - How to design Popup Modal for WordPress in PushEngage?
-', () => {
+test.describe('LOW - About - Validate - How to design Popup Modal for WordPress in PushEngage?', () => {
   
-  test('Validate - How to design Popup Modal for WordPress in PushEngage?
-', async ({ page }) => {
+  test('Validate - How to design Popup Modal for WordPress in PushEngage?', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG811');
-    console.log('📍 Test: Validate - How to design Popup Modal for WordPress in PushEngage?
-');
+    console.log('📍 Test: Validate - How to design Popup Modal for WordPress in PushEngage?');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

@@ -12,13 +12,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('MEDIUM - AdminBarMenu - Validate - Admin Bar menu ', () => {
+test.describe('MEDIUM - AdminBarMenu - Validate - Admin Bar menu', () => {
   
-  test('Validate - Admin Bar menu ', async ({ page }) => {
+  test('Validate - Admin Bar menu', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG1501');
-    console.log('📍 Test: Validate - Admin Bar menu ');
+    console.log('📍 Test: Validate - Admin Bar menu');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

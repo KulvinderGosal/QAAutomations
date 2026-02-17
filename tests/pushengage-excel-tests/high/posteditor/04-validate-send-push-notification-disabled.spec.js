@@ -12,13 +12,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('HIGH - PostEditor - Validate - Send Push Notification disabled ', () => {
+test.describe('HIGH - PostEditor - Validate - Send Push Notification disabled', () => {
   
-  test('Validate - Send Push Notification disabled ', async ({ page }) => {
+  test('Validate - Send Push Notification disabled', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG1804');
-    console.log('📍 Test: Validate - Send Push Notification disabled ');
+    console.log('📍 Test: Validate - Send Push Notification disabled');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

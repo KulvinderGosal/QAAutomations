@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('LOW - About - Validate - How to create a PushEngage drip campaign in WordPress?
-', () => {
+test.describe('LOW - About - Validate - How to create a PushEngage drip campaign in WordPress?', () => {
   
-  test('Validate - How to create a PushEngage drip campaign in WordPress?
-', async ({ page }) => {
+  test('Validate - How to create a PushEngage drip campaign in WordPress?', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG813');
-    console.log('📍 Test: Validate - How to create a PushEngage drip campaign in WordPress?
-');
+    console.log('📍 Test: Validate - How to create a PushEngage drip campaign in WordPress?');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

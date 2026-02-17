@@ -30,7 +30,7 @@ test.describe('CRITICAL - Onboarding - Validate - Sign up Modal - PushEngage log
     
     // Expected Result:
     // Sign up modal should have PushEngage logo, with following text: Create Your PushEngage Account
-    // You're 60 seconds away from getting more traffic, subscribers & sales.
+    // You\'re 60 seconds away from getting more traffic, subscribers & sales.
     
     // Step 1: Login to WordPress
     await helpers.loginToWordPress(page, config);

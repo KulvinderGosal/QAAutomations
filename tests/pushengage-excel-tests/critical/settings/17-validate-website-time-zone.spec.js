@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - Website Time Zone
-', () => {
+test.describe('CRITICAL - Settings - Validate - Website Time Zone', () => {
   
-  test('Validate - Website Time Zone
-', async ({ page }) => {
+  test('Validate - Website Time Zone', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG917');
-    console.log('📍 Test: Validate - Website Time Zone
-');
+    console.log('📍 Test: Validate - Website Time Zone');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

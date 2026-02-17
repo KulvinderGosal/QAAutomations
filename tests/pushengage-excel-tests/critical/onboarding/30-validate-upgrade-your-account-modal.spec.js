@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Onboarding - Validate - Upgrade Your Account Modal
-', () => {
+test.describe('CRITICAL - Onboarding - Validate - Upgrade Your Account Modal', () => {
   
-  test('Validate - Upgrade Your Account Modal
-', async ({ page }) => {
+  test('Validate - Upgrade Your Account Modal', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG130');
-    console.log('📍 Test: Validate - Upgrade Your Account Modal
-');
+    console.log('📍 Test: Validate - Upgrade Your Account Modal');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

@@ -29,8 +29,8 @@ test.describe('CRITICAL - Dashboard - Validate - Recent Notifications', () => {
     
     // Expected Result:
     // When there are no notification data, on Recent notifications section following message should be displayed:
-    // You haven't created any broadcasts yet.
-    // Don't miss out on leveraging the power of web push notifications.
+    // You haven\'t created any broadcasts yet.
+    // Don\'t miss out on leveraging the power of web push notifications.
     // with Create a notification button
     
     // Step 1: Login to WordPress

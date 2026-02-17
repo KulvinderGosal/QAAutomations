@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Enable Multi-action buttons
-', () => {
+test.describe('CRITICAL - Settings - Validate - AutoPush Settings - Enable Multi-action buttons', () => {
   
-  test('Validate - AutoPush Settings - Enable Multi-action buttons
-', async ({ page }) => {
+  test('Validate - AutoPush Settings - Enable Multi-action buttons', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG926');
-    console.log('📍 Test: Validate - AutoPush Settings - Enable Multi-action buttons
-');
+    console.log('📍 Test: Validate - AutoPush Settings - Enable Multi-action buttons');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

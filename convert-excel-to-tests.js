@@ -43,15 +43,23 @@ const PRIORITY_MAP = {
 function generateTestFile(testCase, sheetName, testNumber) {
   const priority = PRIORITY_MAP[sheetName] || 'medium';
   const testId = testCase.Functionality || `TEST${testNumber}`;
-  const testName = testCase.__EMPTY || 'Untitled Test';
+  let testName = testCase.__EMPTY || 'Untitled Test';
   const steps = testCase[Object.keys(testCase).find(k => k.includes(sheetName))] || 'No steps provided';
   const expected = testCase.__EMPTY_1 || 'No expected result';
   
-  // Clean up test name for filename
+  // Escape single quotes and newlines in test name
+  const safeTestName = testName.replace(/'/g, "\\'").replace(/\n/g, ' ').trim();
+  
+  // Clean up test name for filename (truncate if too long)
   const fileName = testName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-|-$/g, '')
+    .substring(0, 80); // Limit filename length
+  
+  // Escape strings for steps and expected results
+  const safeSteps = steps.replace(/\n/g, '\n    // ').replace(/'/g, "\\'");
+  const safeExpected = expected.replace(/\n/g, '\n    // ').replace(/'/g, "\\'");
   
   const testContent = `const { test, expect } = require('@playwright/test');
 const config = require('../../../utils/config');
@@ -67,20 +75,20 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('${priority.toUpperCase()} - ${sheetName} - ${testName}', () => {
+test.describe('${priority.toUpperCase()} - ${sheetName} - ${safeTestName}', () => {
   
-  test('${testName}', async ({ page }) => {
+  test('${safeTestName}', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: ${testId}');
-    console.log('📍 Test: ${testName}');
+    console.log('📍 Test: ${safeTestName}');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n');
     
     // Test Steps from Excel:
-    // ${steps.replace(/\n/g, '\n    // ')}
+    // ${safeSteps}
     
     // Expected Result:
-    // ${expected.replace(/\n/g, '\n    // ')}
+    // ${safeExpected}
     
     // Step 1: Login to WordPress
     await helpers.loginToWordPress(page, config);

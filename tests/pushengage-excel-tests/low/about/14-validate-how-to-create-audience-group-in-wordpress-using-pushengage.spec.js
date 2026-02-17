@@ -14,19 +14,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('LOW - About - Validate - How to create Audience Group in WordPress using PushEngage?
-
-', () => {
+test.describe('LOW - About - Validate - How to create Audience Group in WordPress using PushEngage?', () => {
   
-  test('Validate - How to create Audience Group in WordPress using PushEngage?
-
-', async ({ page }) => {
+  test('Validate - How to create Audience Group in WordPress using PushEngage?', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG814');
-    console.log('📍 Test: Validate - How to create Audience Group in WordPress using PushEngage?
-
-');
+    console.log('📍 Test: Validate - How to create Audience Group in WordPress using PushEngage?');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

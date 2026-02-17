@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('MEDIUM - Analytics - Validate - Goal Tracking - Goal Name
-', () => {
+test.describe('MEDIUM - Analytics - Validate - Goal Tracking - Goal Name', () => {
   
-  test('Validate - Goal Tracking - Goal Name
-', async ({ page }) => {
+  test('Validate - Goal Tracking - Goal Name', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG740');
-    console.log('📍 Test: Validate - Goal Tracking - Goal Name
-');
+    console.log('📍 Test: Validate - Goal Tracking - Goal Name');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

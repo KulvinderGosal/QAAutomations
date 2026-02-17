@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Settings - Validate - Settings - Advance settings - Path for service worker file
-', () => {
+test.describe('CRITICAL - Settings - Validate - Settings - Advance settings - Path for service worker file', () => {
   
-  test('Validate - Settings - Advance settings - Path for service worker file
-', async ({ page }) => {
+  test('Validate - Settings - Advance settings - Path for service worker file', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG939');
-    console.log('📍 Test: Validate - Settings - Advance settings - Path for service worker file
-');
+    console.log('📍 Test: Validate - Settings - Advance settings - Path for service worker file');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

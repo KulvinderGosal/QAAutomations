@@ -13,16 +13,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('CRITICAL - Onboarding - Validate - Already have an account link - Login - Add Your Site to PushEngage Modal
-', () => {
+test.describe('CRITICAL - Onboarding - Validate - Already have an account link - Login - Add Your Site to PushEngage Modal', () => {
   
-  test('Validate - Already have an account link - Login - Add Your Site to PushEngage Modal
-', async ({ page }) => {
+  test('Validate - Already have an account link - Login - Add Your Site to PushEngage Modal', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG124');
-    console.log('📍 Test: Validate - Already have an account link - Login - Add Your Site to PushEngage Modal
-');
+    console.log('📍 Test: Validate - Already have an account link - Login - Add Your Site to PushEngage Modal');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

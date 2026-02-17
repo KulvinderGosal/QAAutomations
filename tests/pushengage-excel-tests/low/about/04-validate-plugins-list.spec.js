@@ -28,7 +28,7 @@ test.describe('LOW - About - Validate -  Plugins list', () => {
     // 
     
     // Expected Result:
-    // On About us Tab, list of AM's other WordPress plugins should be present with Install Plugin button and Status should be Not Installed
+    // On About us Tab, list of AM\'s other WordPress plugins should be present with Install Plugin button and Status should be Not Installed
     
     // Step 1: Login to WordPress
     await helpers.loginToWordPress(page, config);

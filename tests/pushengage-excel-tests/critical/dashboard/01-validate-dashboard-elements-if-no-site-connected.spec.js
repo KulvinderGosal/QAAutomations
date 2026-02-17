@@ -30,7 +30,7 @@ test.describe('CRITICAL - Dashboard - Validate Dashboard Elements - If no site c
     // On Dashboard screen, following elements should be present:
     // 1) PushEngage logo
     // 2) Create link
-    // 3) You haven't finished setting up your site.
+    // 3) You haven\'t finished setting up your site.
     // 4) Warning Avtar and description
     // 5) Connect Your Site button
     // 6) Welcome to PushEngage banner

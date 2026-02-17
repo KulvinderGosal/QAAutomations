@@ -14,19 +14,13 @@ const helpers = require('../../../utils/playwright-helpers');
  * Source: WordPress Plugin Regression Sheet.xlsx
  */
 
-test.describe('LOW - About - Validate - How to enable auto push on publishing WordPress posts?
-
-', () => {
+test.describe('LOW - About - Validate - How to enable auto push on publishing WordPress posts?', () => {
   
-  test('Validate - How to enable auto push on publishing WordPress posts?
-
-', async ({ page }) => {
+  test('Validate - How to enable auto push on publishing WordPress posts?', async ({ page }) => {
     test.setTimeout(120000);
     
     console.log('📍 Test ID: QAWPREG812');
-    console.log('📍 Test: Validate - How to enable auto push on publishing WordPress posts?
-
-');
+    console.log('📍 Test: Validate - How to enable auto push on publishing WordPress posts?');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     
     // Test Steps from Excel:

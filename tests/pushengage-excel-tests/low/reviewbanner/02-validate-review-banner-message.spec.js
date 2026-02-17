@@ -25,7 +25,7 @@ test.describe('LOW - ReviewBanner - Validate - Review Banner - Message', () => {
     // No steps provided
     
     // Expected Result:
-    // The message of the review banner should be - Hey, I have noticed you have been using PushEnageg for some time - that's awesome! Could you please do me a BIG favour and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?
+    // The message of the review banner should be - Hey, I have noticed you have been using PushEnageg for some time - that\'s awesome! Could you please do me a BIG favour and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?
     // ~Syed Balkhi
     // CEO of PushEnageg
     
