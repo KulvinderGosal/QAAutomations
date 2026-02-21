@@ -12,38 +12,14 @@ test.describe('Auto-Send Push Broadcast', () => {
   test('Send Push Broadcast Automatically', async ({ page }) => {
     test.setTimeout(120000);
     
-    // Step 1: Login with explicit navigation
-    console.log('📍 Navigating to WordPress login...');
-    await page.goto('http://productionautomation.local/wp-login.php', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
-    });
-    
-    await page.waitForTimeout(2000);
-    
-    // Check if already logged in or need to login
-    const currentUrl = page.url();
-    if (currentUrl.includes('wp-login.php')) {
-      console.log('🔐 Logging in...');
-      await page.fill('input[name="log"]', 'admin');
-      await page.fill('input[name="pwd"]', 'admin@123=');
-      await page.click('input[type="submit"]');
-      await page.waitForTimeout(3000);
-      console.log('✓ Logged in\n');
-    } else {
-      console.log('✓ Already logged in\n');
-    }
-    
-    // Step 2: Navigate to WordPress dashboard first
-    console.log('📍 Going to WordPress dashboard...');
-    await page.goto('http://productionautomation.local/wp-admin/', {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
-    });
-    await page.waitForTimeout(3000);
-    
-    // Step 3: Navigate to PushEngage
     const baseUrl = config.wpAdminUrl.replace('/wp-admin', '');
+    
+    // Step 1: Login using centralized auth utility
+    console.log('📍 Logging in to WordPress...');
+    await loginToWordPress(page);
+    console.log('✓ Logged in\n');
+    
+    // Step 2: Navigate to PushEngage
     console.log('📍 Navigating to PushEngage...');
     await page.goto(`${baseUrl}/wp-admin/admin.php?page=pushengage#/campaigns/notifications`, {
       waitUntil: 'domcontentloaded',
