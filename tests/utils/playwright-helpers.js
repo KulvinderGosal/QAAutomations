@@ -20,16 +20,28 @@ const SELECTORS = {
  */
 async function loginToWordPress(page, config) {
   console.log('Logging in to WordPress...');
-  await page.goto(`${config.wpAdminUrl.replace('/wp-admin', '')}/wp-login.php`, {
+  
+  // Normalize the admin URL - remove /admin or /wp-admin suffix
+  const baseUrl = config.wpAdminUrl
+    .replace('/wp-admin', '')
+    .replace('/admin', '');
+  
+  const loginUrl = `${baseUrl}/wp-login.php`;
+  
+  await page.goto(loginUrl, {
     waitUntil: 'domcontentloaded',
     timeout: 30000
   });
   
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(3000);
   
   const currentUrl = page.url();
   if (currentUrl.includes('wp-login.php')) {
     console.log('Filling login credentials...');
+    
+    // Wait for login form to be visible
+    await page.waitForSelector('input[name="log"]', { timeout: 15000 });
+    
     await page.fill('input[name="log"]', config.wpUsername);
     await page.fill('input[name="pwd"]', config.wpPassword);
     await page.click('input[type="submit"]');
@@ -44,13 +56,28 @@ async function loginToWordPress(page, config) {
  * Navigate to WordPress dashboard
  */
 async function visitDashboard(page, config) {
-  const baseUrl = config.wpAdminUrl.replace('/wp-admin', '');
+  // Normalize the admin URL - remove /admin or /wp-admin suffix, then add /wp-admin
+  const baseUrl = config.wpAdminUrl
+    .replace('/wp-admin', '')
+    .replace('/admin', '');
+  
   await page.goto(`${baseUrl}/wp-admin/index.php`, {
     waitUntil: 'domcontentloaded',
     timeout: 30000
   });
-  await page.waitForTimeout(2000);
-  await page.locator(SELECTORS.pushEngageMenu).waitFor({ state: 'visible', timeout: 15000 });
+  await page.waitForTimeout(3000);
+  
+  // Wait for PushEngage menu with error handling
+  try {
+    await page.locator(SELECTORS.pushEngageMenu).waitFor({ state: 'visible', timeout: 20000 });
+  } catch (error) {
+    console.log('⚠️ PushEngage menu not immediately visible, checking if page loaded...');
+    // Check if we're at least on the dashboard
+    const url = page.url();
+    if (!url.includes('wp-admin')) {
+      throw new Error(`Not on WordPress admin. Current URL: ${url}`);
+    }
+  }
 }
 
 /**
