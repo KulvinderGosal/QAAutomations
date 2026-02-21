@@ -19,7 +19,8 @@ Automated testing framework for PushEngage WordPress plugin using Playwright. Th
 
 ## ✨ Features
 
-- ✅ **10+ Smoke Test Cases** for WordPress plugin verification
+- ✅ **605 Regression Test Cases** - Comprehensive test coverage organized by priority
+- 🎯 **Priority-Based Testing** - Critical, High, Medium, Low priority levels
 - 🔍 **Plugin Discovery & Validation** - Automatically finds and verifies plugin
 - 🌐 **Multi-Browser Testing** - Chrome, Firefox, Safari support
 - 📊 **Detailed Reports** - HTML, JSON, and JUnit XML outputs
@@ -70,18 +71,57 @@ PLUGIN_SEARCH_TERM=pushengage
 ### 4. Run Tests
 
 ```bash
-# Run all tests
-./run-tests.sh all
-
-# Or use npm directly
-npm run test
-
-# Run plugin tests only
-npm run test:wordpress-plugin
+# Run regression tests by priority
+npm run test:regression:critical      # 245 critical tests (~45 min)
+npm run test:regression:high          # 181 high priority tests (~35 min)
+npm run test:regression:all           # All 605 tests (~2 hours)
 
 # Run with visible browser
-npm run test:headed
+npm run test:regression:critical:headed
 ```
+
+---
+
+## 📊 Test Suite Overview
+
+This framework contains **605 comprehensive regression tests** organized by priority:
+
+| Priority | Tests | Description | Run Time |
+|----------|-------|-------------|----------|
+| **Critical (P0)** | 245 | Must-pass core functionality | ~45 min |
+| **High (P1)** | 181 | Important features | ~35 min |
+| **Medium (P2)** | 136 | Standard features | ~25 min |
+| **Low (P3)** | 43 | Nice-to-have features | ~10 min |
+| **TOTAL** | **605** | Complete coverage | ~2 hours |
+
+### Test Organization
+
+```
+tests/pushengage-regression/
+├── critical/        # 245 tests - Core functionality
+│   ├── campaigns/              # 57 tests
+│   ├── dashboard/              # 53 tests
+│   ├── installation/           # 16 tests
+│   ├── onboarding/             # 41 tests
+│   ├── push-broadcasts/        # 18 tests
+│   ├── settings-core/          # 9 tests
+│   └── settings-excel/         # 50 tests
+├── high/            # 181 tests - Important features
+│   ├── audience/               # 48 tests
+│   ├── drip/                   # 52 tests
+│   ├── triggers/               # 11 tests
+│   └── ... 5 more folders
+├── medium/          # 136 tests - Standard features
+│   ├── analytics/              # 44 tests
+│   ├── design/                 # 42 tests
+│   └── ... 9 more folders
+└── low/             # 43 tests - Edge cases
+    ├── about/                  # 14 tests
+    ├── help/                   # 6 tests
+    └── ... 5 more folders
+```
+
+For complete details, see [Regression Test Suite Documentation](tests/pushengage-regression/README.md).
 
 ---
 

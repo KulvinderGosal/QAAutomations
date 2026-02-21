@@ -1,53 +1,82 @@
-# MEDIUM Priority Tests
+# MEDIUM Priority Tests (P2)
 
 ## Overview
 
-This directory contains MEDIUM priority regression tests for PushEngage plugin.
+This directory contains **136 MEDIUM priority tests** for the PushEngage WordPress plugin. These tests cover standard features that enhance user experience but are not critical to core functionality.
 
-## Test Coverage
+## 📊 Test Coverage
 
-### CLICK TO CHAT (0/4 - 0%)
+| Feature | Tests | Description |
+|---------|-------|-------------|
+| **Admin Bar Menu** | 9 | WordPress admin bar integration |
+| **Analytics** | 44 | Analytics and reporting features |
+| **Click to Chat** | 4 | Chat widget functionality |
+| **Design** | 42 | UI customization and theming |
+| **Goal Tracking** | 2 | Conversion goal tracking |
+| **Notification Icon** | 8 | Notification icon management |
+| **Quick Links** | 8 | Quick access navigation |
+| **Quick Stats** | 8 | Dashboard statistics widgets |
+| **Testing Tools** | 3 | Development and testing helpers |
+| **WhatsApp** | 5 | WhatsApp integration |
+| **WooCommerce Templates** | 3 | E-commerce notification templates |
+| **TOTAL** | **136** | Standard feature tests |
 
-1. [ ] Enable click to chat widget
-2. [ ] Disable click to chat widget
-3. [ ] Configure chat widget style
-4. [ ] Verify chat widget on frontend
+## 🚀 Running Medium Priority Tests
 
-### WHATSAPP (0/5 - 0%)
-
-1. [ ] Configure WhatsApp settings
-2. [ ] Configure WhatsApp Cloud settings
-3. [ ] Enable WhatsApp notifications
-4. [ ] Configure WhatsApp message templates
-5. [ ] Test WhatsApp integration
-
-### GOAL TRACKING (0/2 - 0%)
-
-1. [ ] Enable goal tracking
-2. [ ] Disable goal tracking
-
-### WOOCOMMERCE TEMPLATES (0/3 - 0%)
-
-1. [ ] Navigate to WooCommerce order templates
-2. [ ] Enable template notifications
-3. [ ] Disable template notifications
-
-## Running Tests
-
+### Run All Medium Priority Tests
 ```bash
-# Run all medium priority tests
-npm run test:medium
-
-# Run specific feature tests
-npm run test:medium:push-broadcasts
-npm run test:medium:settings-core
+npm run test:regression:medium
+# Runs all 136 medium priority tests (~25 minutes)
 ```
 
-## Status Legend
+### Run By Feature
+```bash
+npm run test:regression:analytics       # 44 tests - Analytics
+npm run test:regression:design          # 42 tests - UI/Design
+```
 
-- [x] Implemented and working
-- [ ] Not yet implemented (TODO)
+## 📋 Feature Details
 
-## Priority Definition
+### 1. Admin Bar Menu (9 tests)
+WordPress admin bar integration and quick access features.
 
-**MEDIUM**: Standard features that should work but are not critical.
+### 2. Analytics (44 tests)
+Analytics dashboards, reports, and data visualization.
+
+**Run:** `npm run test:regression:analytics`
+
+### 3. Click to Chat (4 tests)
+Chat widget configuration and functionality.
+
+### 4. Design (42 tests)
+UI customization, themes, and appearance settings.
+
+**Run:** `npm run test:regression:design`
+
+### 5. Goal Tracking (2 tests)
+Conversion tracking and goal management.
+
+### 6. Notification Icon (8 tests)
+Notification icon upload and management.
+
+### 7. Quick Links (8 tests)
+Dashboard quick access links and shortcuts.
+
+### 8. Quick Stats (8 tests)
+Dashboard statistics and metrics widgets.
+
+### 9. Testing Tools (3 tests)
+Development helpers and testing utilities.
+
+### 10. WhatsApp (5 tests)
+WhatsApp integration and messaging.
+
+### 11. WooCommerce Templates (3 tests)
+E-commerce notification template management.
+
+---
+
+**Priority:** P2 - Medium  
+**Total Tests:** 136  
+**Estimated Time:** ~25 minutes  
+**Status:** ⚠️ Investigate failures
