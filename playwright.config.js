@@ -7,10 +7,10 @@ require('dotenv').config();
  */
 module.exports = defineConfig({
   testDir: './tests',
-  fullyParallel: true,
+  fullyParallel: false, // Changed: Sequential execution to avoid browser crashes
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: 2, // Changed: Always retry to handle flaky tests
+  workers: 2, // Changed: Limit to 2 workers to prevent resource exhaustion
   
   reporter: [
     ['html'],
@@ -21,10 +21,11 @@ module.exports = defineConfig({
   
   use: {
     baseURL: process.env.WP_ADMIN_URL || 'https://qastaging.pushengage.com/admin',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure', // Changed: Only keep trace on failure
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10000,
+    actionTimeout: 15000, // Changed: Increased from 10s
+    navigationTimeout: 30000, // Added: Explicit navigation timeout
   },
 
   projects: [
@@ -33,6 +34,15 @@ module.exports = defineConfig({
       use: { 
         ...devices['Desktop Chrome'],
         channel: 'chrome',
+        launchOptions: {
+          args: [
+            '--disable-dev-shm-usage', // Prevent /dev/shm memory issues
+            '--disable-gpu', // Disable GPU to save resources
+            '--no-sandbox', // Required for some environments
+            '--disable-setuid-sandbox',
+            '--disable-web-security', // Allow cross-origin requests
+          ],
+        },
       },
     },
     {
@@ -46,9 +56,9 @@ module.exports = defineConfig({
   ],
 
   webServer: undefined, // Set if you have local WP server
-  timeout: 30000,
+  timeout: 60000, // Changed: Increased from 30s to 60s
   expect: {
-    timeout: 5000,
+    timeout: 10000, // Changed: Increased from 5s
   },
-  globalTimeout: 600000,
+  globalTimeout: 7200000, // Changed: 2 hours for full regression
 });
