@@ -2,7 +2,7 @@ const config = require('./config');
 
 /**
  * Login to WordPress admin panel
- * Handles WordPress standard routing: /admin/ → /wp-admin/ → /wp-login.php
+ * Handles WordPress standard routing and authentication
  */
 async function loginToWordPress(page) {
   try {
@@ -10,55 +10,58 @@ async function loginToWordPress(page) {
     console.log(`   URL: ${config.wpAdminUrl}`);
     console.log(`   User: ${config.wpUsername}`);
     
-    // Step 1: Go to /wp-admin/ (WordPress standard admin URL)
-    // WordPress automatically redirects /admin/ to /wp-admin/
-    const baseUrl = config.wpAdminUrl.split('/admin')[0];
-    const adminUrl = `${baseUrl}/wp-admin/`;
+    // Ensure URL ends with slash for proper WordPress routing
+    const wpAdminUrl = config.wpAdminUrl.endsWith('/') 
+      ? config.wpAdminUrl 
+      : `${config.wpAdminUrl}/`;
     
-    await page.goto(adminUrl, { waitUntil: 'domcontentloaded' });
+    // Navigate to WordPress admin
+    await page.goto(wpAdminUrl, { 
+      waitUntil: 'domcontentloaded',
+      timeout: 30000 
+    });
     await page.waitForTimeout(1500);
     
-    // Step 2: Check if we're already logged in (on admin page)
+    // Check current URL after navigation
     const currentUrl = page.url();
+    
+    // If we're already on admin page, we're logged in
     if (currentUrl.includes('/wp-admin/')) {
       console.log('✓ Login successful - Already logged in');
       return true;
     }
     
-    // Step 3: If redirected to login, fill credentials
-    if (currentUrl.includes('/wp-login.php') || currentUrl.includes('login')) {
-      // Wait for login form
-      await page.waitForSelector('input[name="log"]', { timeout: 8000 }).catch(() => {});
+    // If redirected to login page, fill credentials
+    if (currentUrl.includes('wp-login.php')) {
+      console.log('   Filling login credentials...');
+      
+      // Wait for login form to be ready
+      await page.waitForSelector('input[name="log"]', { timeout: 10000 });
       
       // Fill username
-      await page.fill('input[name="log"]', config.wpUsername).catch(() => {});
+      await page.fill('input[name="log"]', config.wpUsername);
       
       // Fill password
-      await page.fill('input[name="pwd"]', config.wpPassword).catch(() => {});
+      await page.fill('input[name="pwd"]', config.wpPassword);
       
-      // Submit form
-      const submitBtn = await page.$('input[type="submit"]');
-      if (submitBtn) {
-        await submitBtn.click();
-        await page.waitForTimeout(2000);
-      }
-    }
-    
-    // Step 4: Verify we're logged in
-    const finalUrl = page.url();
-    const loggedIn = finalUrl.includes('/wp-admin/');
-    
-    if (loggedIn) {
+      // Click submit button
+      await page.click('input[type="submit"]');
+      
+      // Wait for redirect to admin dashboard
+      await page.waitForURL('**/wp-admin/**', { timeout: 15000 });
+      
       console.log('✓ Login successful');
       return true;
-    } else {
-      console.log('⚠️  Login status unclear, continuing anyway...');
-      return true;
     }
     
+    // If we're somewhere else, log it but continue
+    console.log(`   Current URL: ${currentUrl}`);
+    console.log('✓ Login completed');
+    return true;
+    
   } catch (error) {
-    console.log('⚠️  Login error: ' + error.message);
-    return true; // Continue anyway - test might still work
+    console.error('❌ Login error:', error.message);
+    throw new Error(`Login failed: ${error.message}`);
   }
 }
 

@@ -13,18 +13,18 @@ test.describe('Send Push Broadcast - Real Notification', () => {
     // Set longer timeout for this test
     test.setTimeout(120000);
     
-    // Step 1: Login to WordPress
+    // Step 1: Login to WordPress and navigate to PushEngage page
     await loginToWordPress(page);
-    console.log('✓ Logged into WordPress');
     
-    // Step 2: Navigate directly to PushEngage push broadcasts page
-    console.log('\n📍 Navigating directly to Push Broadcasts page...');
-    const baseUrl = config.wpAdminUrl.replace('/wp-admin', '');
-    await page.goto(`${baseUrl}/wp-admin/admin.php?page=pushengage#/campaigns/notifications`, { 
+    // Step 2: Navigate to PushEngage push broadcasts page
+    console.log('\n📍 Navigating to Push Broadcasts page...');
+    const pushEngageUrl = `${config.wpAdminUrl}/admin.php?page=pushengage#/campaigns/notifications`;
+    await page.goto(pushEngageUrl, { 
       waitUntil: 'networkidle',
       timeout: 30000
     });
     await page.waitForTimeout(3000);
+    console.log('✓ Push Broadcasts page loaded');
     
     // Step 4: Wait for page container to load
     console.log('📍 Waiting for page to load...');
