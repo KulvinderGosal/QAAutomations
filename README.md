@@ -43,8 +43,8 @@ Automated testing framework for PushEngage WordPress plugin using Playwright. Th
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/KulvinderGosal/PushEngage-bugs-and-issues.git
-cd PushEngage-bugs-and-issues
+git clone https://github.com/KulvinderGosal/QAAutomations.git
+cd QAAutomations
 ```
 
 ### 2. Install Dependencies
@@ -145,8 +145,8 @@ choco install nodejs
 ### Step 2: Clone Repository
 
 ```bash
-git clone https://github.com/KulvinderGosal/PushEngage-bugs-and-issues.git QA-Automation
-cd QA-Automation
+git clone https://github.com/KulvinderGosal/QAAutomations.git
+cd QAAutomations
 ```
 
 ### Step 3: Install Dependencies
@@ -594,14 +594,25 @@ PLUGIN_SEARCH_TERM=pushengage npm run test:wordpress-plugin
 
 MIT License - feel free to modify and reuse
 
-## 👥 Contributors
+## 👥 Author & Contributors
 
+**Kulvinder Singh**  
+Senior QA Automation Engineer  
+📧 Email: [kgosal@awesomemotive.com](mailto:kgosal@awesomemotive.com)  
+📞 Phone: +91 9779290090
+
+### Contributors
 - QA Team
 - Development Team
 
 ## 📞 Support
 
-For issues and questions, please open an issue in the repository.
+For issues, questions, or support:
+
+- **Email**: kgosal@awesomemotive.com
+- **Phone**: +91 9779290090
+- **GitHub Issues**: [Open an issue](https://github.com/KulvinderGosal/QAAutomations/issues)
+- **Repository**: https://github.com/KulvinderGosal/QAAutomations
 
 ---
 
@@ -617,4 +628,4 @@ For issues and questions, please open an issue in the repository.
 
 ---
 
-**Last Updated**: February 12, 2026
+**Last Updated**: February 21, 2026

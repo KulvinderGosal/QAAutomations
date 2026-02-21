@@ -19,8 +19,9 @@ npm --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/KulvinderGosal/PushEngage-bugs-and-issues.git
-cd PushEngage-bugs-and-issues
+```bash
+git clone https://github.com/KulvinderGosal/QAAutomations.git
+cd QAAutomations
 
 # Install dependencies (takes ~1-2 minutes)
 npm install
