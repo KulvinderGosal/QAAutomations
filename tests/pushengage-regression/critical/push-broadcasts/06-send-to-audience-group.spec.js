@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { loginToWordPress } = require('../../../utils/auth');
-const { config } = require('../../../utils/config');
+const config = require('../../../utils/config');
 
 /**
  * Priority: CRITICAL

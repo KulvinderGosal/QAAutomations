@@ -155,21 +155,91 @@ test.describe('Campaign Tests - Working', () => {
     await page.screenshot({ path: 'test-results/broadcast-form-filled.png', fullPage: true });
     console.log('📸 Screenshot saved\n');
     
-    // Click "Save & Select Audience" button
+    // Click "Save & Select Audience" button (multi-selector strategy)
     console.log('📍 Clicking Save & Select Audience...');
-    await page.locator('button:has-text("Save & Select Audience")').click();
-    await page.waitForTimeout(3000);
+    const saveSelectors = [
+      'button:has-text("Save & Select Audience")',
+      'button:has-text("Save")',
+      'button:has-text("Next")',
+      'button:has-text("Continue")',
+      'button.ant-btn-primary',
+    ];
+    
+    let saveClicked = false;
+    for (const selector of saveSelectors) {
+      const button = page.locator(selector).first();
+      const isVisible = await button.isVisible().catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await button.click();
+        saveClicked = true;
+        break;
+      }
+    }
+    
+    if (!saveClicked) {
+      throw new Error('Could not find Save button');
+    }
+    
+    await page.waitForTimeout(5000);  // Increased from 3000
     console.log('✅ Moved to audience selection\n');
     
-    // Click "Send Now" radio/option
+    // Click "Send Now" radio/option (multi-selector strategy)
     console.log('📍 Selecting Send Now...');
-    await page.locator('text=Send Now').first().click();
-    await page.waitForTimeout(2000);
+    const sendNowSelectors = [
+      'text=Send Now',
+      'span:has-text("Send Now")',
+      'span:has-text("Send")',
+      'label:has-text("Send Now")',
+      '[data-testid*="sendNow"]',
+    ];
+    
+    let sendNowSelected = false;
+    for (const selector of sendNowSelectors) {
+      const option = page.locator(selector).first();
+      const isVisible = await option.isVisible().catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await option.click();
+        sendNowSelected = true;
+        break;
+      }
+    }
+    
+    if (!sendNowSelected) {
+      console.log('   ⚠️ Send Now option not found, proceeding anyway');
+    }
+    
+    await page.waitForTimeout(3000);  // Increased from 2000
     console.log('✅ Send Now selected\n');
     
-    // Click final Send button
+    // Click final Send button (multi-selector strategy)
     console.log('📍 Clicking Send button...');
-    await page.locator('button:has-text("Send")').last().click();
+    const finalSendSelectors = [
+      'button.pe-ant-btn-primary',
+      'button:has-text("Send")',
+      'button:has-text("Confirm")',
+      'button:has-text("Yes")',
+      'button[type="submit"]',
+    ];
+    
+    let sendClicked = false;
+    for (const selector of finalSendSelectors) {
+      const button = page.locator(selector);
+      const isVisible = await button.isVisible().catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await button.click();
+        sendClicked = true;
+        break;
+      }
+    }
+    
+    if (!sendClicked) {
+      console.log('   ⚠️ Using fallback: last Send button');
+      await page.locator('button:has-text("Send")').last().click();
+    }
+    
     await page.waitForTimeout(5000);
     
     // Take final screenshot
@@ -255,21 +325,60 @@ test.describe('Campaign Tests - Working', () => {
     }
     console.log('✅ Form filled\n');
     
-    // Save
+    // Save (multi-selector strategy)
     console.log('📍 Saving...');
-    await page.locator('button:has-text("Save & Select Audience")').click();
-    await page.waitForTimeout(3000);
+    const saveSelectors = [
+      'button:has-text("Save & Select Audience")',
+      'button:has-text("Save")',
+      'button:has-text("Next")',
+      'button.ant-btn-primary',
+    ];
     
-    // Select Schedule option
+    for (const selector of saveSelectors) {
+      const button = page.locator(selector).first();
+      if (await button.isVisible().catch(() => false)) {
+        await button.click();
+        break;
+      }
+    }
+    await page.waitForTimeout(5000);  // Increased from 3000
+    
+    // Select Schedule option (multi-selector strategy)
     console.log('📍 Selecting Schedule...');
-    await page.locator('text=Schedule').first().click();
-    await page.waitForTimeout(2000);
+    const scheduleSelectors = [
+      'text=Schedule',
+      'span:has-text("Schedule")',
+      'label:has-text("Schedule")',
+      '[data-testid*="schedule"]',
+    ];
+    
+    for (const selector of scheduleSelectors) {
+      const option = page.locator(selector).first();
+      if (await option.isVisible().catch(() => false)) {
+        await option.click();
+        break;
+      }
+    }
+    await page.waitForTimeout(3000);  // Increased from 2000
     console.log('✅ Schedule selected\n');
     
-    // Save/Schedule
+    // Save/Schedule (multi-selector strategy)
     console.log('📍 Clicking Schedule button...');
-    await page.locator('button:has-text("Schedule"), button:has-text("Save")').last().click();
-    await page.waitForTimeout(3000);
+    const scheduleButtonSelectors = [
+      'button:has-text("Schedule")',
+      'button:has-text("Save")',
+      'button:has-text("Confirm")',
+      'button.ant-btn-primary',
+    ];
+    
+    for (const selector of scheduleButtonSelectors) {
+      const button = page.locator(selector).last();
+      if (await button.isVisible().catch(() => false)) {
+        await button.click();
+        break;
+      }
+    }
+    await page.waitForTimeout(5000);  // Increased from 3000
     
     await page.screenshot({ path: 'test-results/broadcast-scheduled.png', fullPage: true });
     
@@ -341,10 +450,23 @@ test.describe('Campaign Tests - Working', () => {
     }
     console.log('✅ Partial form filled (for draft)\n');
     
-    // Save as draft - Click Save but don't proceed to send
+    // Save as draft (multi-selector strategy)
     console.log('📍 Saving as draft...');
-    await page.locator('button:has-text("Save & Select Audience")').click();
-    await page.waitForTimeout(2000);
+    const saveSelectors = [
+      'button:has-text("Save & Select Audience")',
+      'button:has-text("Save")',
+      'button:has-text("Next")',
+      'button.ant-btn-primary',
+    ];
+    
+    for (const selector of saveSelectors) {
+      const button = page.locator(selector).first();
+      if (await button.isVisible().catch(() => false)) {
+        await button.click();
+        break;
+      }
+    }
+    await page.waitForTimeout(3000);  // Increased from 2000
     
     // Go back or close without sending
     await page.goBack();

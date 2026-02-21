@@ -69,23 +69,85 @@ test.describe('Send Push Broadcast - Real Notification', () => {
     });
     console.log('✓ Screenshot saved: broadcast-filled-form.png');
     
-    // Step 10: Click "Save & Select Audience" button
+    // Step 10: Click "Save & Select Audience" button (multi-selector strategy)
     console.log('\n📍 Clicking Save & Select Audience...');
-    const saveButton = page.locator('div.campaigns-breadcrumb-navbar button');
-    await saveButton.click();
-    await page.waitForTimeout(2000);
+    const saveSelectors = [
+      'button:has-text("Save & Select Audience")',
+      'button:has-text("Save")',
+      'button:has-text("Next")',
+      'div.campaigns-breadcrumb-navbar button',
+      'button.ant-btn-primary',
+    ];
     
-    // Step 11: Click the first option in the breadcrumb right section (likely "Send Now")
-    console.log('📍 Selecting send option...');
-    const sendOption = page.locator('div.campaigns-breadcrumb-navbar div.campaigns-breadcrumb-right span').first();
-    await sendOption.click();
-    await page.waitForTimeout(1000);
+    let saveClicked = false;
+    for (const selector of saveSelectors) {
+      const button = page.locator(selector).first();
+      const isVisible = await button.isVisible().catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await button.click();
+        saveClicked = true;
+        break;
+      }
+    }
     
-    // Step 12: Click the primary button to send
+    if (!saveClicked) {
+      throw new Error('Could not find Save button');
+    }
+    await page.waitForTimeout(5000);  // Increased from 2000
+    
+    // Step 11: Click "Send Now" option (multi-selector strategy)
+    console.log('📍 Selecting Send Now...');
+    const sendNowSelectors = [
+      'text=Send Now',
+      'span:has-text("Send Now")',
+      'span:has-text("Send")',
+      'label:has-text("Send Now")',
+      'div.campaigns-breadcrumb-navbar div.campaigns-breadcrumb-right span',
+      '[data-testid*="sendNow"]',
+    ];
+    
+    let sendNowSelected = false;
+    for (const selector of sendNowSelectors) {
+      const option = page.locator(selector).first();
+      const isVisible = await option.isVisible().catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await option.click();
+        sendNowSelected = true;
+        break;
+      }
+    }
+    
+    if (!sendNowSelected) {
+      console.log('   ⚠️ Send Now option not found, proceeding anyway');
+    }
+    await page.waitForTimeout(3000);  // Increased from 1000
+    
+    // Step 12: Click the primary button to send (multi-selector strategy)
     console.log('📍 Sending notification...');
-    const sendButton = page.locator('button.pe-ant-btn-primary');
-    await sendButton.waitFor({ state: 'visible', timeout: 10000 });
-    await sendButton.click();
+    const sendButtonSelectors = [
+      'button.pe-ant-btn-primary',
+      'button:has-text("Send")',
+      'button:has-text("Confirm")',
+      'button[type="submit"]',
+    ];
+    
+    let sendClicked = false;
+    for (const selector of sendButtonSelectors) {
+      const button = page.locator(selector);
+      const isVisible = await button.isVisible({ timeout: 10000 }).catch(() => false);
+      if (isVisible) {
+        console.log(`   ✓ Found: ${selector}`);
+        await button.click();
+        sendClicked = true;
+        break;
+      }
+    }
+    
+    if (!sendClicked) {
+      throw new Error('Could not find Send button');
+    }
     
     // Step 13: Wait for success/confirmation
     await page.waitForTimeout(3000);

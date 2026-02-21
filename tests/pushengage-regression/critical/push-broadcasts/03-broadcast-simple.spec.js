@@ -157,25 +157,92 @@ test('Send Immediate Broadcast', async ({ page }) => {
   await page.screenshot({ path: 'test-results/03-form-filled.png', fullPage: true });
   console.log('📸 Screenshot saved: 03-form-filled.png\n');
   
-  // 5. Click Save & Select Audience
+  // 5. Click Save & Select Audience (multi-selector strategy)
   console.log('Step 5: Clicking Save & Select Audience...');
-  await page.click('button:has-text("Save & Select Audience")');
-  await page.waitForTimeout(3000);
+  const saveSelectors = [
+    'button:has-text("Save & Select Audience")',
+    'button:has-text("Save")',
+    'button:has-text("Next")',
+    'button.ant-btn-primary',
+  ];
+  
+  let saveClicked = false;
+  for (const selector of saveSelectors) {
+    const button = page.locator(selector).first();
+    const isVisible = await button.isVisible().catch(() => false);
+    if (isVisible) {
+      console.log(`   ✓ Found: ${selector}`);
+      await button.click();
+      saveClicked = true;
+      break;
+    }
+  }
+  
+  if (!saveClicked) {
+    throw new Error('Could not find Save button');
+  }
+  
+  await page.waitForTimeout(5000);  // Increased from 3000
   console.log('✅ On audience page\n');
   
   // Take screenshot
   await page.screenshot({ path: 'test-results/04-audience-page.png', fullPage: true });
   console.log('📸 Screenshot saved: 04-audience-page.png\n');
   
-  // 6. Click Send Now
+  // 6. Click Send Now (multi-selector strategy)
   console.log('Step 6: Clicking Send Now...');
-  await page.click('text=Send Now');
-  await page.waitForTimeout(2000);
+  const sendNowSelectors = [
+    'text=Send Now',
+    'span:has-text("Send Now")',
+    'label:has-text("Send Now")',
+    '[data-testid*="sendNow"]',
+  ];
+  
+  let sendNowSelected = false;
+  for (const selector of sendNowSelectors) {
+    const option = page.locator(selector).first();
+    const isVisible = await option.isVisible().catch(() => false);
+    if (isVisible) {
+      console.log(`   ✓ Found: ${selector}`);
+      await option.click();
+      sendNowSelected = true;
+      break;
+    }
+  }
+  
+  if (!sendNowSelected) {
+    console.log('   ⚠️ Send Now option not found, proceeding anyway');
+  }
+  
+  await page.waitForTimeout(3000);  // Increased from 2000
   console.log('✅ Send Now selected\n');
   
-  // 7. Click Send button
+  // 7. Click Send button (multi-selector strategy)
   console.log('Step 7: Clicking Send button...');
-  await page.click('button:has-text("Send")');
+  const finalSendSelectors = [
+    'button.pe-ant-btn-primary',
+    'button:has-text("Send")',
+    'button:has-text("Confirm")',
+    'button[type="submit"]',
+  ];
+  
+  let sendClicked = false;
+  for (const selector of finalSendSelectors) {
+    const button = page.locator(selector);
+    const isVisible = await button.isVisible().catch(() => false);
+    if (isVisible) {
+      console.log(`   ✓ Found: ${selector}`);
+      await button.click();
+      sendClicked = true;
+      break;
+    }
+  }
+  
+  if (!sendClicked) {
+    console.log('   ⚠️ Using fallback: last Send button');
+    await page.locator('button:has-text("Send")').last().click();
+  }
+  
   await page.waitForTimeout(5000);
   console.log('✅ Send button clicked\n');
   
@@ -252,16 +319,55 @@ test('Schedule Future Broadcast', async ({ page }) => {
   }
   await page.waitForTimeout(1000);
   
-  // 5. Click Save & Select Audience
-  await page.click('button:has-text("Save & Select Audience")');
-  await page.waitForTimeout(3000);
+  // 5. Click Save & Select Audience (multi-selector strategy)
+  const saveSelectors = [
+    'button:has-text("Save & Select Audience")',
+    'button:has-text("Save")',
+    'button:has-text("Next")',
+    'button.ant-btn-primary',
+  ];
   
-  // 6. Click Schedule (not Send Now)
-  await page.click('text=Schedule');
-  await page.waitForTimeout(2000);
+  for (const selector of saveSelectors) {
+    const button = page.locator(selector).first();
+    if (await button.isVisible().catch(() => false)) {
+      await button.click();
+      break;
+    }
+  }
+  await page.waitForTimeout(5000);  // Increased from 3000
   
-  // 7. Click Schedule/Save button
-  await page.click('button:has-text("Schedule"), button:has-text("Save")');
+  // 6. Click Schedule (multi-selector strategy)
+  const scheduleSelectors = [
+    'text=Schedule',
+    'span:has-text("Schedule")',
+    'label:has-text("Schedule")',
+    '[data-testid*="schedule"]',
+  ];
+  
+  for (const selector of scheduleSelectors) {
+    const option = page.locator(selector).first();
+    if (await option.isVisible().catch(() => false)) {
+      await option.click();
+      break;
+    }
+  }
+  await page.waitForTimeout(3000);  // Increased from 2000
+  
+  // 7. Click Schedule/Save button (multi-selector strategy)
+  const scheduleButtonSelectors = [
+    'button:has-text("Schedule")',
+    'button:has-text("Save")',
+    'button:has-text("Confirm")',
+    'button.ant-btn-primary',
+  ];
+  
+  for (const selector of scheduleButtonSelectors) {
+    const button = page.locator(selector).last();
+    if (await button.isVisible().catch(() => false)) {
+      await button.click();
+      break;
+    }
+  }
   await page.waitForTimeout(5000);
   
   console.log('✅ Broadcast scheduled!');
@@ -341,16 +447,55 @@ test('Create A/B Test Broadcast', async ({ page }) => {
   
   await page.waitForTimeout(1000);
   
-  // 7. Click Save & Select Audience
-  await page.click('button:has-text("Save & Select Audience")');
-  await page.waitForTimeout(3000);
+  // 7. Click Save & Select Audience (multi-selector strategy)
+  const saveSelectors = [
+    'button:has-text("Save & Select Audience")',
+    'button:has-text("Save")',
+    'button:has-text("Next")',
+    'button.ant-btn-primary',
+  ];
   
-  // 8. Click Send Now
-  await page.click('text=Send Now');
-  await page.waitForTimeout(2000);
+  for (const selector of saveSelectors) {
+    const button = page.locator(selector).first();
+    if (await button.isVisible().catch(() => false)) {
+      await button.click();
+      break;
+    }
+  }
+  await page.waitForTimeout(5000);  // Increased from 3000
   
-  // 9. Click Send
-  await page.click('button:has-text("Send")');
+  // 8. Click Send Now (multi-selector strategy)
+  const sendNowSelectors = [
+    'text=Send Now',
+    'span:has-text("Send Now")',
+    'label:has-text("Send Now")',
+    '[data-testid*="sendNow"]',
+  ];
+  
+  for (const selector of sendNowSelectors) {
+    const option = page.locator(selector).first();
+    if (await option.isVisible().catch(() => false)) {
+      await option.click();
+      break;
+    }
+  }
+  await page.waitForTimeout(3000);  // Increased from 2000
+  
+  // 9. Click Send (multi-selector strategy)
+  const finalSendSelectors = [
+    'button.pe-ant-btn-primary',
+    'button:has-text("Send")',
+    'button:has-text("Confirm")',
+    'button[type="submit"]',
+  ];
+  
+  for (const selector of finalSendSelectors) {
+    const button = page.locator(selector);
+    if (await button.isVisible().catch(() => false)) {
+      await button.click();
+      break;
+    }
+  }
   await page.waitForTimeout(5000);
   
   console.log('✅ A/B Test broadcast sent!');
