@@ -3,33 +3,33 @@ const { loginToWordPress } = require('../../../utils/playwright-helpers');
 const { navigateToPushEngagePage, waitForReactPageLoad } = require('../../../utils/pushengage-helpers');
 const config = require('../../../utils/config');
 
-test.describe('FUNCTIONAL - Create Drip Campaign', () => {
-  test('Create a new drip campaign', async ({ page }) => {
+test.describe('FUNCTIONAL - Create Trigger', () => {
+  test('Create a new trigger campaign', async ({ page }) => {
     console.log(`🔐 Logging into WordPress admin (${config.environment})...`);
     console.log(`   URL: ${config.wpAdminUrl}`);
     console.log(`   User: ${config.wpUsername}`);
     
     await loginToWordPress(page, config);
     
-    // Navigate to Drip using sidebar menu
-    const navigated = await navigateToPushEngagePage(page, 'Drip', config);
+    // Navigate to Triggers using sidebar menu
+    const navigated = await navigateToPushEngagePage(page, 'Triggers', config);
     if (!navigated) {
-      console.log('⚠️ Could not navigate to Drip page - feature may not be available');
+      console.log('⚠️ Could not navigate to Triggers page - feature may not be available');
       return;
     }
     
     await waitForReactPageLoad(page);
     
-    console.log('📍 Creating new drip campaign...');
+    console.log('📍 Creating new trigger...');
     
-    // Click Create/Add Drip button
+    // Click Create/Add Trigger button
     const createButtonSelectors = [
       'button:has-text("Create")',
-      'button:has-text("Add Drip")',
-      'button:has-text("New Campaign")',
+      'button:has-text("Add Trigger")',
+      'button:has-text("New Trigger")',
       'a:has-text("Create")',
       'button.ant-btn-primary',
-      '[data-testid="create-drip"]'
+      '[data-testid="create-trigger"]'
     ];
     
     let createClicked = false;
@@ -37,7 +37,7 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
       try {
         await page.click(selector, { timeout: 5000 });
         createClicked = true;
-        console.log(`✓ Clicked Create Drip button using: ${selector}`);
+        console.log(`✓ Clicked Create Trigger button using: ${selector}`);
         break;
       } catch (e) {
         continue;
@@ -45,22 +45,22 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     }
     
     if (!createClicked) {
-      console.log('⚠️ Could not find Create Drip button - feature may not be available');
+      console.log('⚠️ Could not find Create Trigger button - feature may not be available');
       return;
     }
     
     await page.waitForTimeout(3000);
     
     const timestamp = Date.now();
-    const campaignName = `🔬 Smoke Test Drip ${timestamp}`;
+    const triggerName = `🔬 Smoke Test Trigger ${timestamp}`;
     
-    console.log('📍 Filling drip campaign details...');
+    console.log('📍 Filling trigger details...');
     
-    // Campaign name
+    // Trigger name
     const nameSelectors = [
       'input[placeholder*="name" i]',
       'input[name="name"]',
-      'input[name="campaign_name"]',
+      'input[name="trigger_name"]',
       'input[type="text"]:visible',
       '.ant-input:visible'
     ];
@@ -68,8 +68,8 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     let nameFilled = false;
     for (const selector of nameSelectors) {
       try {
-        await page.fill(selector, campaignName, { timeout: 5000 });
-        console.log(`✓ Filled campaign name using: ${selector}`);
+        await page.fill(selector, triggerName, { timeout: 5000 });
+        console.log(`✓ Filled trigger name using: ${selector}`);
         nameFilled = true;
         break;
       } catch (e) {
@@ -78,15 +78,43 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     }
     
     if (!nameFilled) {
-      console.log('⚠️ Could not fill campaign name');
+      console.log('⚠️ Could not fill trigger name');
       return;
     }
     
     await page.waitForTimeout(1000);
     
+    // Select trigger type (e.g., Page Visit, Time-based, etc.)
+    console.log('📍 Selecting trigger type...');
+    
+    const triggerTypeSelectors = [
+      'select[name="trigger_type"]',
+      '.ant-select',
+      'text=Page Visit',
+      'text=Time Based',
+      '[data-testid="trigger-type"]'
+    ];
+    
+    for (const selector of triggerTypeSelectors) {
+      try {
+        await page.click(selector, { timeout: 5000 });
+        console.log(`✓ Clicked trigger type using: ${selector}`);
+        await page.waitForTimeout(1000);
+        // Select first option if dropdown opens
+        try {
+          await page.keyboard.press('Enter');
+        } catch (e) {}
+        break;
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    await page.waitForTimeout(1000);
+    
     // Add notification details
-    const notificationTitle = `Welcome Notification ${timestamp}`;
-    const notificationMessage = `Thank you for subscribing! This is a test drip notification.`;
+    const notificationTitle = `Trigger Notification ${timestamp}`;
+    const notificationMessage = `This is an automated test trigger notification.`;
     
     const titleSelectors = [
       'input[placeholder*="title" i]',
@@ -124,15 +152,15 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     
     await page.waitForTimeout(1000);
     
-    console.log('📍 Saving drip campaign...');
+    console.log('📍 Saving trigger...');
     
-    // Save campaign
+    // Save trigger
     const saveSelectors = [
       'button:has-text("Save")',
-      'button:has-text("Create Campaign")',
+      'button:has-text("Create Trigger")',
       'button.ant-btn-primary:has-text("Save")',
       'button[type="submit"]',
-      '[data-testid="save-drip"]'
+      '[data-testid="save-trigger"]'
     ];
     
     let saveClicked = false;
@@ -149,15 +177,15 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     
     await page.waitForTimeout(3000);
     
-    console.log('✅ Drip campaign created!');
-    console.log(`   Name: ${campaignName}`);
-    console.log(`   First Notification: ${notificationTitle}`);
+    console.log('✅ Trigger created!');
+    console.log(`   Name: ${triggerName}`);
+    console.log(`   Notification: ${notificationTitle}`);
     
     // Verify success
     const successIndicators = [
       'text=Success',
       'text=created',
-      'text=Campaign',
+      'text=Trigger',
       '.ant-message-success'
     ];
     

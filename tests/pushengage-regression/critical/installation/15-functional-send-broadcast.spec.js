@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { loginToWordPress } = require('../../../utils/playwright-helpers');
+const { navigateToPushEngagePage, waitForReactPageLoad } = require('../../../utils/pushengage-helpers');
 const config = require('../../../utils/config');
 
 test.describe('FUNCTIONAL - Send Push Broadcast', () => {
@@ -10,45 +11,20 @@ test.describe('FUNCTIONAL - Send Push Broadcast', () => {
     
     await loginToWordPress(page, config);
     
-    console.log('📍 Navigating to PushEngage Broadcasts...');
-    
-    // Navigate to PushEngage menu
-    const baseUrl = config.wpAdminUrl.replace('/wp-admin', '').replace('/admin', '');
-    await page.goto(`${baseUrl}/wp-admin/admin.php?page=pushengage-dashboard`, {
-      waitUntil: 'domcontentloaded',
-      timeout: 30000
-    });
-    await page.waitForTimeout(3000);
-    
-    // Navigate to Broadcasts
-    const broadcastMenuSelectors = [
-      'a:has-text("Broadcasts")',
-      'a[href*="pushengage-broadcasts"]',
-      'text=Broadcasts',
-      '[data-testid="broadcasts-menu"]'
-    ];
-    
-    let broadcastMenuClicked = false;
-    for (const selector of broadcastMenuSelectors) {
-      try {
-        await page.click(selector, { timeout: 5000 });
-        broadcastMenuClicked = true;
-        console.log(`✓ Clicked Broadcasts menu using: ${selector}`);
-        break;
-      } catch (e) {
-        continue;
-      }
-    }
-    
-    if (!broadcastMenuClicked) {
-      console.log('⚠️ Could not find Broadcasts menu, trying direct URL...');
+    // Navigate to Broadcasts using sidebar menu
+    const navigated = await navigateToPushEngagePage(page, 'Broadcasts', config);
+    if (!navigated) {
+      console.log('⚠️ Could not navigate to Broadcasts page');
+      // Try direct navigation as fallback
+      const baseUrl = config.wpAdminUrl.replace('/wp-admin', '').replace('/admin', '');
       await page.goto(`${baseUrl}/wp-admin/admin.php?page=pushengage-broadcasts`, {
         waitUntil: 'domcontentloaded',
         timeout: 30000
       });
+      await page.waitForTimeout(3000);
     }
     
-    await page.waitForTimeout(3000);
+    await waitForReactPageLoad(page);
     
     console.log('📍 Creating new broadcast...');
     
@@ -124,6 +100,7 @@ test.describe('FUNCTIONAL - Send Push Broadcast', () => {
     await page.waitForTimeout(1000);
     
     // URL field (optional)
+    const baseUrl = config.wpAdminUrl.replace('/wp-admin', '').replace('/admin', '');
     const urlSelectors = [
       'input[placeholder*="url" i]',
       'input[name="url"]',
