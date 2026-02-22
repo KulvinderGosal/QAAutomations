@@ -16,6 +16,7 @@ playwright-report/**/*.json
 videos/
 screenshots/
 *.xml
+*.log
 
 # IDE
 .vscode/
