@@ -42,7 +42,7 @@ jobs:
           echo "BROWSER=${{ matrix.browser }}" >> .env
       
       - name: ✅ Run Smoke Tests
-        run: npm run test:smoke --project=${{ matrix.browser }}
+        run: npx playwright test tests/pushengage-regression/critical/installation/ --project=${{ matrix.browser }}
         env:
           WP_ADMIN_URL: ${{ secrets.WP_ADMIN_URL }}
           WP_USERNAME: ${{ secrets.WP_USERNAME }}
@@ -101,7 +101,7 @@ jobs:
         run: cp .env.example .env
       
       - name: 🎯 Run Plugin Tests
-        run: npm run test:wordpress-plugin
+        run: npx playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js --project=chromium
         env:
           WP_ADMIN_URL: ${{ secrets.WP_ADMIN_URL }}
           WP_USERNAME: ${{ secrets.WP_USERNAME }}

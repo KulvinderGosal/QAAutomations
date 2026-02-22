@@ -11,7 +11,8 @@ npm-debug.log*
 # Test results and artifacts
 test-results/
 *.html
-*.json
+test-results/**/*.json
+playwright-report/**/*.json
 videos/
 screenshots/
 *.xml
