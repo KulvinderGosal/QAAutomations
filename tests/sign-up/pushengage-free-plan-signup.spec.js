@@ -227,38 +227,6 @@ test.describe('PushEngage Free Plan Signup', () => {
       console.log('⚠️ Could not find last name field');
     }
     
-    // Fill website field (if present)
-    const websiteFieldSelectors = [
-      'input[name="website"]',
-      'input[name="site_url"]',
-      'input[name="url"]',
-      'input[placeholder*="website" i]',
-      'input[placeholder*="site" i]',
-      'input[id*="website" i]',
-      '#website'
-    ];
-    
-    let websiteFilled = false;
-    for (const selector of websiteFieldSelectors) {
-      try {
-        const field = page.locator(selector).first();
-        const isVisible = await field.isVisible({ timeout: 3000 });
-        
-        if (isVisible) {
-          await field.fill(testWebsite);
-          console.log(`✓ Filled website field: ${selector}`);
-          websiteFilled = true;
-          break;
-        }
-      } catch (e) {
-        continue;
-      }
-    }
-    
-    if (!websiteFilled) {
-      console.log('⚠️ Could not find website field');
-    }
-    
     // Fill industry field (custom dropdown - if present)
     console.log('🏭 Selecting industry...');
     
@@ -391,6 +359,51 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     if (!emailFilled) {
       console.log('⚠️ Could not find or correctly fill email field');
+    }
+    
+    await page.waitForTimeout(500);
+    
+    // Fill website field AFTER email (form JS may clear it otherwise)
+    console.log('🌐 Filling website field (after email)...');
+    const websiteFieldSelectors = [
+      'input[name="website"]',
+      'input[name="site_url"]',
+      'input[name="url"]',
+      'input[placeholder*="website" i]',
+      'input[placeholder*="site" i]',
+      'input[id*="website" i]',
+      '#website'
+    ];
+    
+    let websiteFilled = false;
+    for (const selector of websiteFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 3000 });
+        
+        if (isVisible) {
+          await field.clear();
+          await page.waitForTimeout(300);
+          await field.fill(testWebsite);
+          await page.waitForTimeout(500);
+          // Verify it was filled correctly
+          const value = await field.inputValue();
+          if (value === testWebsite) {
+            console.log(`✓ Filled website field: ${selector}`);
+            console.log(`  Verified value: ${value}`);
+            websiteFilled = true;
+            break;
+          } else {
+            console.log(`  ⚠️ Website field value mismatch. Expected: ${testWebsite}, Got: ${value}`);
+          }
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    if (!websiteFilled) {
+      console.log('⚠️ Could not find or correctly fill website field');
     }
     
     await page.waitForTimeout(1000);
