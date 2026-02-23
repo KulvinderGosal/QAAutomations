@@ -55,7 +55,10 @@
     "test:regression:audience": "TEST_ENV=local playwright test tests/pushengage-regression/high/audience/ --project=chromium",
     "test:regression:design": "TEST_ENV=local playwright test tests/pushengage-regression/medium/design/ --project=chromium",
     "test:regression:analytics": "TEST_ENV=local playwright test tests/pushengage-regression/medium/analytics/ --project=chromium",
-    "convert:excel": "node convert-excel-to-tests.js"
+    "convert:excel": "node convert-excel-to-tests.js",
+    "test:signup": "playwright test tests/sign-up/",
+    "test:signup:headed": "playwright test tests/sign-up/ --headed",
+    "test:signup:debug": "playwright test tests/sign-up/ --debug"
   },
   "keywords": [
     "playwright",
