@@ -135,6 +135,9 @@ test.describe('PushEngage Free Plan Signup', () => {
       fullPage: true 
     });
     
+    // IMPORTANT: Fill fields in this specific order to avoid React state management issues
+    // Order: Password → First Name → Last Name → Website → Industry → Email (LAST)
+    
     // Fill password field FIRST
     const passwordFieldSelectors = [
       'input[type="password"]',
@@ -330,12 +333,14 @@ test.describe('PushEngage Free Plan Signup', () => {
     ];
     
     let websiteFilled = false;
+    let websiteFieldLocator = null;
     for (const selector of websiteFieldSelectors) {
       try {
         const field = page.locator(selector).first();
         const isVisible = await field.isVisible({ timeout: 3000 });
         
         if (isVisible) {
+          websiteFieldLocator = field;
           await field.clear();
           await page.waitForTimeout(300);
           await field.fill(testWebsite);
@@ -408,44 +413,36 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     await page.waitForTimeout(1000);
     
-    // CRITICAL: Use JavaScript to set values directly (bypass form event handlers that swap values)
-    console.log('\n🔧 Using JavaScript to set final field values (bypassing form handlers)...');
+    // CRITICAL FIX: The form's JavaScript swaps email and website values
+    // Solution: Right before submission, forcefully set the website field to correct value
+    console.log('\n🔧 CRITICAL FIX: Re-setting website field right before submission...');
     
-    // Set website value using JavaScript
-    const websiteScript = `
-      const websiteField = document.querySelector('input[placeholder*="site" i], input[name="website"]');
-      if (websiteField) {
-        websiteField.value = '${testWebsite}';
-        websiteField.dispatchEvent(new Event('input', { bubbles: true }));
-        websiteField.dispatchEvent(new Event('change', { bubbles: true }));
+    if (websiteFieldLocator) {
+      // Clear and refill website field
+      await websiteFieldLocator.clear();
+      await page.waitForTimeout(300);
+      await websiteFieldLocator.fill(testWebsite);
+      await page.waitForTimeout(300);
+      
+      // Force set via JavaScript as final backup
+      await page.evaluate((website) => {
+        const websiteField = document.querySelector('input[placeholder*="site" i], input[name="website"]');
+        if (websiteField) {
+          websiteField.value = website;
+        }
+      }, testWebsite);
+      
+      await page.waitForTimeout(500);
+      
+      // Verify final value
+      const finalValue = await websiteFieldLocator.inputValue();
+      console.log(`✓ Website field final value: ${finalValue}`);
+      
+      if (finalValue !== testWebsite) {
+        console.log(`⚠️ WARNING: Website field still shows: ${finalValue}`);
+        console.log(`   Expected: ${testWebsite}`);
       }
-    `;
-    await page.evaluate(websiteScript);
-    await page.waitForTimeout(500);
-    console.log('✓ Set website value via JavaScript');
-    
-    // Set email value using JavaScript
-    const emailScript = `
-      const emailField = document.querySelector('input[type="email"]');
-      if (emailField) {
-        emailField.value = '${testEmail}';
-        emailField.dispatchEvent(new Event('input', { bubbles: true }));
-        emailField.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    `;
-    await page.evaluate(emailScript);
-    await page.waitForTimeout(500);
-    console.log('✓ Set email value via JavaScript');
-    
-    await page.waitForTimeout(1000);
-    
-    // Verify both fields have correct values
-    const finalWebsiteValue = await page.locator('input[placeholder*="site" i]').first().inputValue().catch(() => '');
-    const finalEmailValue = await page.locator('input[type="email"]').first().inputValue().catch(() => '');
-    
-    console.log(`\n🔍 Final field values after JavaScript set:`);
-    console.log(`  Email: ${finalEmailValue}`);
-    console.log(`  Website: ${finalWebsiteValue}`);
+    }
     
     await page.waitForTimeout(1000);
     
@@ -588,13 +585,14 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     // Check for error messages
     const errorIndicators = [
+      'div[class*="error"]',
+      'span[class*="error"]',
       'text=Error',
       'text=Invalid',
       'text=already exists',
       'text=required',
-      'div[class*="error"]',
-      'div[class*="alert"]',
-      'span[class*="error"]'
+      'text=should be of the format',
+      'div[class*="alert"]'
     ];
     
     let errorFound = false;
@@ -602,19 +600,33 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     for (const selector of errorIndicators) {
       try {
-        const element = page.locator(selector).first();
-        const isVisible = await element.isVisible({ timeout: 3000 });
+        const elements = page.locator(selector);
+        const count = await elements.count();
         
-        if (isVisible) {
-          errorMessage = await element.textContent();
-          console.log(`⚠️ Error indicator found: ${selector}`);
-          console.log(`  Message: ${errorMessage}`);
-          errorFound = true;
+        for (let i = 0; i < count; i++) {
+          const element = elements.nth(i);
+          const isVisible = await element.isVisible({ timeout: 1000 }).catch(() => false);
+          
+          if (isVisible) {
+            const text = await element.textContent().catch(() => '');
+            if (text && text.trim().length > 0) {
+              errorMessage += (errorMessage ? ' | ' : '') + text.trim();
+              errorFound = true;
+            }
+          }
+        }
+        
+        if (errorFound) {
+          console.log(`⚠️ Error found using selector: ${selector}`);
           break;
         }
       } catch (e) {
         continue;
       }
+    }
+    
+    if (errorFound && errorMessage) {
+      console.log(`  Full Error Message: ${errorMessage}`);
     }
     
     // Check if URL changed (another success indicator)
