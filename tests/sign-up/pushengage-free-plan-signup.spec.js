@@ -152,10 +152,22 @@ test.describe('PushEngage Free Plan Signup', () => {
         const isVisible = await field.isVisible({ timeout: 5000 });
         
         if (isVisible) {
+          // Clear the field first to ensure no auto-fill interference
+          await field.clear();
+          await page.waitForTimeout(500);
+          // Fill with email
           await field.fill(testEmail);
-          console.log(`✓ Filled email field: ${selector}`);
-          emailFilled = true;
-          break;
+          await page.waitForTimeout(500);
+          // Verify it was filled correctly
+          const value = await field.inputValue();
+          if (value === testEmail) {
+            console.log(`✓ Filled email field: ${selector}`);
+            console.log(`  Verified value: ${value}`);
+            emailFilled = true;
+            break;
+          } else {
+            console.log(`  ⚠️ Email field value mismatch. Expected: ${testEmail}, Got: ${value}`);
+          }
         }
       } catch (e) {
         continue;
@@ -163,7 +175,7 @@ test.describe('PushEngage Free Plan Signup', () => {
     }
     
     if (!emailFilled) {
-      console.log('⚠️ Could not find email field');
+      console.log('⚠️ Could not find or correctly fill email field');
     }
     
     // Fill password field
