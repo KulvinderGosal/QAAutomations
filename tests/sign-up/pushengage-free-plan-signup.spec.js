@@ -408,6 +408,67 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     await page.waitForTimeout(1000);
     
+    // FINAL VERIFICATION: Re-check and re-fill website if needed (form JS may have cleared it)
+    console.log('\n🔍 Final verification of all fields...');
+    
+    // Re-verify website field
+    for (const selector of websiteFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 2000 });
+        
+        if (isVisible) {
+          const currentValue = await field.inputValue();
+          if (currentValue !== testWebsite) {
+            console.log(`⚠️ Website field was cleared! Re-filling...`);
+            console.log(`  Current value: ${currentValue}`);
+            await field.clear();
+            await page.waitForTimeout(300);
+            await field.fill(testWebsite);
+            await page.waitForTimeout(500);
+            const newValue = await field.inputValue();
+            console.log(`✓ Re-filled website field`);
+            console.log(`  Verified value: ${newValue}`);
+          } else {
+            console.log(`✓ Website field still has correct value`);
+          }
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    // Re-verify email field
+    for (const selector of emailFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 2000 });
+        
+        if (isVisible) {
+          const currentValue = await field.inputValue();
+          if (currentValue !== testEmail) {
+            console.log(`⚠️ Email field was changed! Re-filling...`);
+            console.log(`  Current value: ${currentValue}`);
+            await field.clear();
+            await page.waitForTimeout(300);
+            await field.fill(testEmail);
+            await page.waitForTimeout(500);
+            const newValue = await field.inputValue();
+            console.log(`✓ Re-filled email field`);
+            console.log(`  Verified value: ${newValue}`);
+          } else {
+            console.log(`✓ Email field still has correct value`);
+          }
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    await page.waitForTimeout(1000);
+    
     // Take screenshot after filling form
     await page.screenshot({ 
       path: 'test-results/signup-001-form-filled.png', 
