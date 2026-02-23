@@ -290,38 +290,90 @@ test.describe('PushEngage Free Plan Signup', () => {
       console.log('⚠️ Could not find website field');
     }
     
-    // Fill industry field (dropdown - if present)
+    // Fill industry field (custom dropdown - if present)
     console.log('🏭 Selecting industry...');
-    const industryFieldSelectors = [
-      'select[name="industry"]',
-      'select[id*="industry" i]',
-      'div[class*="industry"] select',
-      'select'
-    ];
     
+    // Try multiple approaches for different dropdown types
     let industrySelected = false;
-    for (const selector of industryFieldSelectors) {
+    
+    // Approach 1: Try standard select element
+    try {
+      const selectField = await page.locator('select[name="industry"], select[id*="industry" i]').first();
+      if (await selectField.isVisible({ timeout: 2000 })) {
+        await selectField.selectOption({ index: 1 });
+        console.log('✓ Selected industry via select element');
+        industrySelected = true;
+      }
+    } catch (e) {
+      // Continue to next approach
+    }
+    
+    // Approach 2: Try custom dropdown (React Select or similar)
+    if (!industrySelected) {
       try {
-        const field = page.locator(selector).first();
-        const isVisible = await field.isVisible({ timeout: 3000 });
+        // Look for the dropdown trigger
+        const dropdownTrigger = await page.locator(
+          'div[class*="industry"] >> css=div[class*="select"], ' +
+          'div:has-text("Industry") ~ div[class*="dropdown"], ' +
+          'div:has-text("--Select--")'
+        ).first();
         
-        if (isVisible) {
-          // Wait a moment for the field to be interactive
-          await page.waitForTimeout(500);
-          // Select first non-empty option (index 1 usually skips the placeholder)
-          await field.selectOption({ index: 1 });
-          console.log(`✓ Selected industry: ${selector}`);
-          industrySelected = true;
-          break;
+        if (await dropdownTrigger.isVisible({ timeout: 2000 })) {
+          // Click to open dropdown
+          await dropdownTrigger.click();
+          await page.waitForTimeout(1000);
+          console.log('  ✓ Opened industry dropdown');
+          
+          // Wait for options to appear and select first one
+          const firstOption = await page.locator(
+            'div[role="option"]:not([aria-disabled="true"]), ' +
+            'li[role="option"]:not([aria-disabled="true"]), ' +
+            'div[class*="option"]:not([class*="placeholder"])'
+          ).first();
+          
+          if (await firstOption.isVisible({ timeout: 3000 })) {
+            await firstOption.click();
+            console.log('✓ Selected industry via custom dropdown');
+            industrySelected = true;
+          }
         }
       } catch (e) {
-        console.log(`  ⚠️ Could not select industry with ${selector}: ${e.message}`);
-        continue;
+        console.log(`  ⚠️ Custom dropdown approach failed: ${e.message}`);
+      }
+    }
+    
+    // Approach 3: Try clicking the dropdown arrow icon
+    if (!industrySelected) {
+      try {
+        const dropdownArrow = await page.locator(
+          'div:has-text("Industry") ~ div svg, ' +
+          'div[class*="industry"] svg[class*="arrow"], ' +
+          'div[class*="industry"] [class*="indicator"]'
+        ).first();
+        
+        if (await dropdownArrow.isVisible({ timeout: 2000 })) {
+          await dropdownArrow.click();
+          await page.waitForTimeout(1000);
+          console.log('  ✓ Clicked dropdown arrow');
+          
+          // Select first visible option
+          const option = await page.locator(
+            'div[role="option"], li[role="option"]'
+          ).first();
+          
+          if (await option.isVisible({ timeout: 2000 })) {
+            await option.click();
+            console.log('✓ Selected industry via dropdown arrow');
+            industrySelected = true;
+          }
+        }
+      } catch (e) {
+        console.log(`  ⚠️ Dropdown arrow approach failed: ${e.message}`);
       }
     }
     
     if (!industrySelected) {
-      console.log('⚠️ Could not find or select industry field');
+      console.log('⚠️ Could not find or select industry field (may not be required for free plan)');
     }
     
     await page.waitForTimeout(1000);
