@@ -291,27 +291,40 @@ test.describe('PushEngage Free Plan Signup', () => {
     }
     
     // Fill industry field (dropdown - if present)
+    console.log('🏭 Selecting industry...');
     const industryFieldSelectors = [
       'select[name="industry"]',
       'select[id*="industry" i]',
-      'div[class*="industry"] select'
+      'div[class*="industry"] select',
+      'select'
     ];
     
+    let industrySelected = false;
     for (const selector of industryFieldSelectors) {
       try {
         const field = page.locator(selector).first();
         const isVisible = await field.isVisible({ timeout: 3000 });
         
         if (isVisible) {
-          // Select first non-empty option
+          // Wait a moment for the field to be interactive
+          await page.waitForTimeout(500);
+          // Select first non-empty option (index 1 usually skips the placeholder)
           await field.selectOption({ index: 1 });
           console.log(`✓ Selected industry: ${selector}`);
+          industrySelected = true;
           break;
         }
       } catch (e) {
+        console.log(`  ⚠️ Could not select industry with ${selector}: ${e.message}`);
         continue;
       }
     }
+    
+    if (!industrySelected) {
+      console.log('⚠️ Could not find or select industry field');
+    }
+    
+    await page.waitForTimeout(1000);
     
     await page.waitForTimeout(1000);
     
