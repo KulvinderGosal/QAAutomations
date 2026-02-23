@@ -19,6 +19,7 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     }
     
     await waitForReactPageLoad(page);
+    await page.waitForTimeout(5000); // Extra wait for React components to render
     
     console.log('📍 Creating new drip campaign...');
     
@@ -46,6 +47,8 @@ test.describe('FUNCTIONAL - Create Drip Campaign', () => {
     
     if (!createClicked) {
       console.log('⚠️ Could not find Create Drip button - feature may not be available');
+      await page.screenshot({ path: `test-results/drip-no-button-${Date.now()}.png`, fullPage: true });
+      console.log('⚠️ Screenshot saved. Skipping drip creation test.');
       return;
     }
     

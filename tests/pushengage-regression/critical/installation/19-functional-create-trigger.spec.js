@@ -19,6 +19,7 @@ test.describe('FUNCTIONAL - Create Trigger', () => {
     }
     
     await waitForReactPageLoad(page);
+    await page.waitForTimeout(5000); // Extra wait for React components to render
     
     console.log('📍 Creating new trigger...');
     
@@ -46,6 +47,8 @@ test.describe('FUNCTIONAL - Create Trigger', () => {
     
     if (!createClicked) {
       console.log('⚠️ Could not find Create Trigger button - feature may not be available');
+      await page.screenshot({ path: `test-results/trigger-no-button-${Date.now()}.png`, fullPage: true });
+      console.log('⚠️ Screenshot saved. Skipping trigger creation test.');
       return;
     }
     

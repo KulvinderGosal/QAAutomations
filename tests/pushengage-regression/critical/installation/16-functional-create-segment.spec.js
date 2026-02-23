@@ -19,6 +19,7 @@ test.describe('FUNCTIONAL - Create Segment', () => {
     }
     
     await waitForReactPageLoad(page);
+    await page.waitForTimeout(5000); // Extra wait for React components to render
     
     console.log('📍 Creating new segment...');
     
@@ -46,6 +47,8 @@ test.describe('FUNCTIONAL - Create Segment', () => {
     
     if (!createClicked) {
       console.log('⚠️ Could not find Create Segment button - feature may not be available');
+      await page.screenshot({ path: `test-results/segment-no-button-${Date.now()}.png`, fullPage: true });
+      console.log('⚠️ Screenshot saved. Skipping segment creation test.');
       return;
     }
     
