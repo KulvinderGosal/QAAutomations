@@ -118,11 +118,11 @@ test.describe('PushEngage Free Plan Signup', () => {
     
     // Generate unique test data
     const timestamp = Date.now();
-    const testEmail = `kgosal_qaautomation_${timestamp}@awesomemotive.com`;
+    const testEmail = `kgosal+qaautomation_${timestamp}@awesomemotive.com`;
     const testPassword = `TestPass123!${timestamp}`;
     const testFirstName = `Test`;
     const testLastName = `User${timestamp}`;
-    const testWebsite = `https://qastaging.pushengage.com`;
+    const testWebsite = `qastaging.pushengage.com`;
     
     console.log(`  Email: ${testEmail}`);
     console.log(`  First Name: ${testFirstName}`);
