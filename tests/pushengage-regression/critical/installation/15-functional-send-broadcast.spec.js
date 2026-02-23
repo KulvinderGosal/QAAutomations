@@ -47,7 +47,7 @@ test.describe('FUNCTIONAL - Send Push Broadcast', () => {
     
     if (!createClicked) {
       console.log('⚠️ Could not find Create Broadcast button with any selector');
-      await page.screenshot({ path: `test-results/broadcast-no-button-${timestamp || Date.now()}.png`, fullPage: true });
+      await page.screenshot({ path: `test-results/broadcast-no-button-${Date.now()}.png`, fullPage: true });
       console.log('⚠️ Screenshot saved. Skipping broadcast creation test.');
       return;
     }
