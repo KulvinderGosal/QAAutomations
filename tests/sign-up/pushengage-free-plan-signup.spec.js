@@ -120,11 +120,13 @@ test.describe('PushEngage Free Plan Signup', () => {
     const timestamp = Date.now();
     const testEmail = `kgosal_qaautomation_${timestamp}@awesomemotive.com`;
     const testPassword = `TestPass123!${timestamp}`;
-    const testName = `Test User ${timestamp}`;
+    const testFirstName = `Test`;
+    const testLastName = `User${timestamp}`;
     const testWebsite = `https://qastaging.pushengage.com`;
     
     console.log(`  Email: ${testEmail}`);
-    console.log(`  Name: ${testName}`);
+    console.log(`  First Name: ${testFirstName}`);
+    console.log(`  Last Name: ${testLastName}`);
     console.log(`  Website: ${testWebsite}\n`);
     
     // Take screenshot of signup form
@@ -194,29 +196,66 @@ test.describe('PushEngage Free Plan Signup', () => {
       console.log('⚠️ Could not find password field');
     }
     
-    // Fill name field (if present)
-    const nameFieldSelectors = [
-      'input[name="name"]',
-      'input[name="full_name"]',
-      'input[name="fullname"]',
-      'input[placeholder*="name" i]',
-      'input[id*="name" i]',
-      '#name'
+    // Fill first name field
+    const firstNameFieldSelectors = [
+      'input[name="firstName"]',
+      'input[name="first_name"]',
+      'input[name="fname"]',
+      'input[placeholder*="first" i]',
+      'input[id*="firstName" i]',
+      'input[id*="first" i]'
     ];
     
-    for (const selector of nameFieldSelectors) {
+    let firstNameFilled = false;
+    for (const selector of firstNameFieldSelectors) {
       try {
         const field = page.locator(selector).first();
-        const isVisible = await field.isVisible({ timeout: 3000 });
+        const isVisible = await field.isVisible({ timeout: 5000 });
         
         if (isVisible) {
-          await field.fill(testName);
-          console.log(`✓ Filled name field: ${selector}`);
+          await field.fill(testFirstName);
+          console.log(`✓ Filled first name field: ${selector}`);
+          firstNameFilled = true;
           break;
         }
       } catch (e) {
         continue;
       }
+    }
+    
+    if (!firstNameFilled) {
+      console.log('⚠️ Could not find first name field');
+    }
+    
+    // Fill last name field
+    const lastNameFieldSelectors = [
+      'input[name="lastName"]',
+      'input[name="last_name"]',
+      'input[name="lname"]',
+      'input[placeholder*="last" i]',
+      'input[id*="lastName" i]',
+      'input[id*="last" i]'
+    ];
+    
+    let lastNameFilled = false;
+    for (const selector of lastNameFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 5000 });
+        
+        if (isVisible) {
+          await field.fill(testLastName);
+          console.log(`✓ Filled last name field: ${selector}`);
+          lastNameFilled = true;
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    if (!lastNameFilled) {
+      console.log('⚠️ Could not find last name field');
     }
     
     // Fill website field (if present)
@@ -230,6 +269,7 @@ test.describe('PushEngage Free Plan Signup', () => {
       '#website'
     ];
     
+    let websiteFilled = false;
     for (const selector of websiteFieldSelectors) {
       try {
         const field = page.locator(selector).first();
@@ -238,6 +278,34 @@ test.describe('PushEngage Free Plan Signup', () => {
         if (isVisible) {
           await field.fill(testWebsite);
           console.log(`✓ Filled website field: ${selector}`);
+          websiteFilled = true;
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    if (!websiteFilled) {
+      console.log('⚠️ Could not find website field');
+    }
+    
+    // Fill industry field (dropdown - if present)
+    const industryFieldSelectors = [
+      'select[name="industry"]',
+      'select[id*="industry" i]',
+      'div[class*="industry"] select'
+    ];
+    
+    for (const selector of industryFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 3000 });
+        
+        if (isVisible) {
+          // Select first non-empty option
+          await field.selectOption({ index: 1 });
+          console.log(`✓ Selected industry: ${selector}`);
           break;
         }
       } catch (e) {
