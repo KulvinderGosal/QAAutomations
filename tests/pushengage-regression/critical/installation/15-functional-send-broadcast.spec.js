@@ -25,6 +25,7 @@ test.describe('FUNCTIONAL - Send Push Broadcast', () => {
     
     // Click Create/New Broadcast button
     const createButtonSelectors = [
+      'button:has-text("Add New")',
       'button:has-text("Create")',
       'button:has-text("New Broadcast")',
       'a:has-text("Create")',
