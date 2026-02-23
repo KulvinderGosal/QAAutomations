@@ -103,7 +103,7 @@ npx playwright test tests/sign-up/ --project=webkit
 ### Test Data
 
 The test automatically generates unique test data:
-- Email: `kgosal+qaautomation{timestamp}@awesomemotive.com`
+- Email: `kgosal_qaautomation_{timestamp}@awesomemotive.com`
 - Password: `TestPass123!{timestamp}`
 - Name: `Test User {timestamp}`
 - Website: `https://qastaging.pushengage.com`
