@@ -135,50 +135,7 @@ test.describe('PushEngage Free Plan Signup', () => {
       fullPage: true 
     });
     
-    // Fill email field
-    const emailFieldSelectors = [
-      'input[type="email"]',
-      'input[name="email"]',
-      'input[placeholder*="email" i]',
-      'input[id*="email" i]',
-      '#email',
-      'input[autocomplete="email"]'
-    ];
-    
-    let emailFilled = false;
-    for (const selector of emailFieldSelectors) {
-      try {
-        const field = page.locator(selector).first();
-        const isVisible = await field.isVisible({ timeout: 5000 });
-        
-        if (isVisible) {
-          // Clear the field first to ensure no auto-fill interference
-          await field.clear();
-          await page.waitForTimeout(500);
-          // Fill with email
-          await field.fill(testEmail);
-          await page.waitForTimeout(500);
-          // Verify it was filled correctly
-          const value = await field.inputValue();
-          if (value === testEmail) {
-            console.log(`✓ Filled email field: ${selector}`);
-            console.log(`  Verified value: ${value}`);
-            emailFilled = true;
-            break;
-          } else {
-            console.log(`  ⚠️ Email field value mismatch. Expected: ${testEmail}, Got: ${value}`);
-          }
-        }
-      } catch (e) {
-        continue;
-      }
-    }
-    
-    if (!emailFilled) {
-      console.log('⚠️ Could not find or correctly fill email field');
-    }
-    
-    // Fill password field
+    // Fill password field FIRST
     const passwordFieldSelectors = [
       'input[type="password"]',
       'input[name="password"]',
@@ -389,6 +346,52 @@ test.describe('PushEngage Free Plan Signup', () => {
     }
     
     await page.waitForTimeout(1000);
+    
+    await page.waitForTimeout(1000);
+    
+    // IMPORTANT: Fill email field LAST to prevent form JavaScript from overwriting it
+    console.log('📧 Filling email field (last to prevent overwrite)...');
+    const emailFieldSelectors = [
+      'input[type="email"]',
+      'input[name="email"]',
+      'input[placeholder*="email" i]',
+      'input[id*="email" i]',
+      '#email',
+      'input[autocomplete="email"]'
+    ];
+    
+    let emailFilled = false;
+    for (const selector of emailFieldSelectors) {
+      try {
+        const field = page.locator(selector).first();
+        const isVisible = await field.isVisible({ timeout: 5000 });
+        
+        if (isVisible) {
+          // Clear the field first to ensure no auto-fill interference
+          await field.clear();
+          await page.waitForTimeout(500);
+          // Fill with email
+          await field.fill(testEmail);
+          await page.waitForTimeout(500);
+          // Verify it was filled correctly
+          const value = await field.inputValue();
+          if (value === testEmail) {
+            console.log(`✓ Filled email field: ${selector}`);
+            console.log(`  Verified value: ${value}`);
+            emailFilled = true;
+            break;
+          } else {
+            console.log(`  ⚠️ Email field value mismatch. Expected: ${testEmail}, Got: ${value}`);
+          }
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+    
+    if (!emailFilled) {
+      console.log('⚠️ Could not find or correctly fill email field');
+    }
     
     await page.waitForTimeout(1000);
     
