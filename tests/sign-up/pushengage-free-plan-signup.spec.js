@@ -122,7 +122,7 @@ test.describe('PushEngage Free Plan Signup', () => {
     const testPassword = `TestPass123!${timestamp}`;
     const testFirstName = `Test`;
     const testLastName = `User${timestamp}`;
-    const testWebsite = `qastaging.pushengage.com`;
+    const testWebsite = `https://qastaging.pushengage.com`;
     
     console.log(`  Email: ${testEmail}`);
     console.log(`  First Name: ${testFirstName}`);
