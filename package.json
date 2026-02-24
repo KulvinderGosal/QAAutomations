@@ -58,7 +58,12 @@
     "convert:excel": "node convert-excel-to-tests.js",
     "test:signup": "playwright test tests/sign-up/",
     "test:signup:headed": "playwright test tests/sign-up/ --headed",
-    "test:signup:debug": "playwright test tests/sign-up/ --debug"
+    "test:signup:debug": "playwright test tests/sign-up/ --debug",
+    "playwright:install": "playwright install chromium firefox webkit",
+    "playwright:install:deps": "playwright install-deps",
+    "playwright:clean": "rm -rf ~/Library/Caches/ms-playwright/chromium-* ~/Library/Caches/ms-playwright/firefox-* ~/Library/Caches/ms-playwright/webkit-* && npm run playwright:install",
+    "playwright:status": "playwright --version && du -sh ~/Library/Caches/ms-playwright/",
+    "postinstall": "playwright install chromium --with-deps"
   },
   "keywords": [
     "playwright",
@@ -84,8 +89,12 @@
   "homepage": "https://github.com/KulvinderGosal/QAAutomations#readme",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.58.2",
     "dotenv": "^16.0.0",
     "xlsx": "^0.18.5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }

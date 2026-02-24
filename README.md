@@ -160,13 +160,14 @@ This will install:
 - `dotenv` - Environment variable management
 - All required dependencies
 
-### Step 4: Install Playwright Browsers
+**Note:** Playwright browsers are automatically installed via postinstall hook. For managing installations and avoiding duplicates, see **[Playwright Setup Guide](docs/PLAYWRIGHT_SETUP.md)**.
+
+### Step 4: Verify Installation (Optional)
 
 ```bash
-npx playwright install
+# Check Playwright installation
+npm run playwright:status
 ```
-
-This downloads and installs Chromium, Firefox, and WebKit browsers (~600MB).
 
 ---
 
@@ -588,6 +589,8 @@ PLUGIN_SEARCH_TERM=pushengage npm run test:wordpress-plugin
 - **[Implementation Guide](docs/FULL_REGRESSION_IMPLEMENTATION_GUIDE.md)** - Comprehensive patterns and templates
 - **[Progress Tracker](docs/IMPLEMENTATION_PROGRESS.md)** - Current implementation status and roadmap
 - **[Test Coverage Report](docs/TEST_COVERAGE_REPORT.md)** - Complete test inventory and breakdown
+- **[MCP Integration Guide](docs/MCP_INTEGRATION_GUIDE.md)** - Integrate Playwright MCP server tools with tests
+- **[MCP Quick Reference](docs/MCP_QUICK_REFERENCE.md)** - Quick reference for MCP tools and patterns
 
 ### External Resources
 - [Playwright Documentation](https://playwright.dev/docs/intro)

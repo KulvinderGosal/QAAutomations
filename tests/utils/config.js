@@ -20,6 +20,18 @@ module.exports = {
   pluginSearchTerm: process.env.PLUGIN_SEARCH_TERM || 'pushengage',
   timeout: parseInt(process.env.TEST_TIMEOUT) || 30000,
   
+  // Test credit card data (for payment testing)
+  testCreditCard: {
+    cardholderName: 'Kulvinder Singh',
+    cardNumber: '4242424242424242',
+    expiryDate: '12/44',
+    cvv: '123',
+    // Individual fields for forms that split month/year
+    expiryMonth: '12',
+    expiryYear: '44',
+    expiryYear4Digit: '2044'
+  },
+  
   // Environment info
   environment: isLocal ? 'local' : 'staging',
   isLocal: isLocal,
