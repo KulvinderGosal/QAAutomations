@@ -70,7 +70,9 @@
     "playwright:install:deps": "playwright install-deps",
     "playwright:clean": "rm -rf ~/Library/Caches/ms-playwright/chromium-* ~/Library/Caches/ms-playwright/firefox-* ~/Library/Caches/ms-playwright/webkit-* && npm run playwright:install",
     "playwright:status": "playwright --version && du -sh ~/Library/Caches/ms-playwright/",
-    "test:smoke:fast": "playwright test tests/pushengage-regression/critical/installation/ tests/pushengage-regression/critical/dashboard/ --project=chromium --workers=5",
+    "test:smoke": "playwright test tests/smoke/",
+    "test:smoke:fast": "playwright test tests/smoke/critical-smoke.spec.js --project=chromium --workers=5",
+    "test:smoke:headed": "playwright test tests/smoke/ --headed",
     "test:regression:fast": "playwright test tests/pushengage-regression/critical/ --project=chromium --workers=10 --retries=1",
     "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1"
   },
