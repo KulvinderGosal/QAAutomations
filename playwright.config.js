@@ -7,10 +7,10 @@ require('dotenv').config();
  */
 module.exports = defineConfig({
   testDir: './tests',
-  fullyParallel: false, // Changed: Sequential execution to avoid browser crashes
+  fullyParallel: true, // OPTIMIZED: Enable parallel execution for speed
   forbidOnly: !!process.env.CI,
-  retries: 2, // Changed: Always retry to handle flaky tests
-  workers: 2, // Changed: Limit to 2 workers to prevent resource exhaustion
+  retries: 1, // OPTIMIZED: Reduced retries for faster feedback
+  workers: process.env.CI ? 2 : 10, // OPTIMIZED: 10 workers locally, 2 in CI
   
   reporter: [
     ['html'],
