@@ -74,7 +74,17 @@
     "test:smoke:fast": "playwright test tests/smoke/critical-smoke.spec.js --project=chromium --workers=5",
     "test:smoke:headed": "playwright test tests/smoke/ --headed",
     "test:regression:fast": "playwright test tests/pushengage-regression/critical/ --project=chromium --workers=10 --retries=1",
-    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1"
+    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1",
+    "onboarding:checklist": "node scripts/gen-onboarding-checklist.js",
+    "test:onboarding": "playwright test --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:headed": "playwright test --config=playwright-onboarding.config.js --project=chromium --headed",
+    "test:onboarding:debug": "playwright test --config=playwright-onboarding.config.js --project=chromium --debug",
+    "test:onboarding:p0": "playwright test --config=playwright-onboarding.config.js --project=chromium --grep @P0",
+    "test:onboarding:web": "playwright test tests/onboarding-wizard/web-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:chat": "playwright test tests/onboarding-wizard/chat-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:app": "playwright test tests/onboarding-wizard/app-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:backend": "playwright test tests/onboarding-wizard/backend/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:report": "playwright show-report test-results/onboarding-report"
   },
   "keywords": [
     "playwright",
