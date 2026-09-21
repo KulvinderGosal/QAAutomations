@@ -68,8 +68,9 @@ test.describe('L · Side effects on existing frontend screens', () => {
 
     // Site 4 (created before the 2026-08-05 cutoff) → {slug}.pushengage.com
     if (site.site4.name) await wiz.switchSite(page, site.site4.name);
-    // TODO(route): confirm the Push Broadcast create route that renders the preview.
-    await wiz.goto(page, wiz.routes.picker.replace('/onboarding', '/campaigns'));
+    // TODO(route): /campaigns is the broadcast list; confirm the create/preview
+    // route (also a Drip, a Triggered campaign, and the Templates gallery per L2).
+    await wiz.goto(page, '/campaigns');
     // TODO(selector): confirm the preview domain-line element; assert the apex only.
     await expect(page.getByText(/\.pushengage\.com/i).first())
       .toBeVisible({ timeout: cfg.timeouts.nav });
@@ -77,7 +78,7 @@ test.describe('L · Side effects on existing frontend screens', () => {
 
     // Site 5 (created on/after the cutoff, http-only) → {slug}.trypushengage.com
     if (site.site5.name) await wiz.switchSite(page, site.site5.name);
-    await wiz.goto(page, wiz.routes.picker.replace('/onboarding', '/campaigns'));
+    await wiz.goto(page, '/campaigns');
     await expect(page.getByText(/\.trypushengage\.com/i).first())
       .toBeVisible({ timeout: cfg.timeouts.nav });
   });
