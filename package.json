@@ -84,6 +84,8 @@
     "test:onboarding:chat": "playwright test tests/onboarding-wizard/chat-track/ --config=playwright-onboarding.config.js --project=chromium",
     "test:onboarding:app": "playwright test tests/onboarding-wizard/app-track/ --config=playwright-onboarding.config.js --project=chromium",
     "test:onboarding:backend": "playwright test tests/onboarding-wizard/backend/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:walkthrough": "playwright test tests/onboarding-wizard/walkthrough/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:walkthrough:headed": "playwright test tests/onboarding-wizard/walkthrough/ --config=playwright-onboarding.config.js --project=chromium --headed",
     "test:onboarding:report": "playwright show-report test-results/onboarding-report"
   },
   "keywords": [

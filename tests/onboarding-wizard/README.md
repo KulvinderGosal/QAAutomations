@@ -74,6 +74,47 @@ The suite runs **serially** (`workers: 1`) because the wizard writes real accoun
 state (segments, popups, workflows, widgets). A `webkit` project exists for the
 Safari-only date-parse cases (L2 / D11 / J6).
 
+## Manual walkthrough (Claude / a tester driving the wizard end to end)
+
+`walkthrough/01-manual-walkthrough.spec.js` drives the dashboard like a hands-on
+tester: **fresh signup → picker → Web Push track → Chat Widget → App Push →
+completion**, in one shared logged-in session. It's a **soft pass** — each case
+is attempted, marked Pass/Fail/Blocked with a screenshot, and the run continues
+(a tester notes an issue and keeps going). At the end it writes:
+
+```
+test-results/onboarding-walkthrough/<run>/report.md    # table: case · status · note · screenshot
+test-results/onboarding-walkthrough/<run>/report.json
+test-results/onboarding-walkthrough/<run>/<caseId>.png
+```
+
+Run it (watch it drive):
+
+```bash
+npm run test:onboarding:walkthrough:headed
+```
+
+Env overrides: `WALKTHROUGH_PLAN=free|business` (default business — uses the Stripe
+test card), `WALKTHROUGH_SIGNUP_URL` (if the register page differs),
+`WALKTHROUGH_EMAIL` / `WALKTHROUGH_PASSWORD` (else a unique plus-addressed email
+is generated). If signup hits an email-verification wall it records that as
+Blocked and falls back to logging into `PE_ACCOUNT_B_*` so the rest of the pass
+still runs. Scope: the linearly-reachable happy-path cases across B–I plus an
+observed telemetry check; negative/edge/fixture/backend cases stay in the
+per-case suite + checklist.
+
+### Running it live from a Claude Code environment
+
+For Claude to perform this walkthrough itself, the environment's network policy
+must allow outbound HTTPS to:
+
+- `*.pushengage.com` (dashboard, signup, API) — at minimum `staging-app-dashboard2.pushengage.com` and `staging.pushengage.com`
+- `js.stripe.com`, `api.stripe.com`, `m.stripe.com` — the signup card step
+- `*.googletagmanager.com` / `www.google-analytics.com` — only if telemetry assertions must see GTM
+
+A default locked-down web environment blocks all of these, so the walkthrough
+must run locally or in an environment provisioned with the allowlist above.
+
 ## Conventions & honesty about coverage
 
 - One test per plan case; the title carries the **case id** and a **`@P0/@P1/@P2`** tag.
