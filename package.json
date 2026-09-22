@@ -74,7 +74,8 @@
     "test:smoke:fast": "playwright test tests/smoke/critical-smoke.spec.js --project=chromium --workers=5",
     "test:smoke:headed": "playwright test tests/smoke/ --headed",
     "test:regression:fast": "playwright test tests/pushengage-regression/critical/ --project=chromium --workers=10 --retries=1",
-    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1"
+    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1",
+    "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium"
   },
   "keywords": [
     "playwright",

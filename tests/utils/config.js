@@ -35,4 +35,15 @@ module.exports = {
   // Environment info
   environment: isLocal ? 'local' : 'staging',
   isLocal: isLocal,
+
+  // TypeSafe Jev (System One) decision model
+  // Used for confidence-scored, AI-assisted assertions. See tests/utils/jev-helpers.js
+  jev: {
+    apiKey: process.env.TYPESAFE_API_KEY || '',
+    baseUrl: process.env.TYPESAFE_BASE_URL || 'https://api.typesafe.ai',
+    model: process.env.JEV_MODEL || 'typesafe/jev',
+    // Minimum confidence (0..1) before an AI answer is treated as decisive.
+    minConfidence: parseFloat(process.env.JEV_MIN_CONFIDENCE) || 0.7,
+    timeout: parseInt(process.env.JEV_TIMEOUT) || 10000,
+  },
 };
