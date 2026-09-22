@@ -17,7 +17,7 @@
     "test:pushengage": "playwright test tests/pushengage/",
     "test:pushengage:single": "playwright test tests/pushengage/ --project=chromium",
     "test:broadcast": "playwright test tests/pushengage/broadcast-test.spec.js --project=chromium",
-    "test:send-broadcast": "playwright test tests/pushengage/send-broadcast.spec.js --project=chromium",
+    "test:send-broadcast": "playwright test tests/pushengage-regression/critical/push-broadcasts/04-send-broadcast.spec.js --project=chromium",
     "test:auto-broadcast": "TEST_ENV=local playwright test tests/pushengage/auto-send-broadcast.spec.js --project=chromium",
     "test:auto-broadcast:headed": "TEST_ENV=local playwright test tests/pushengage/auto-send-broadcast.spec.js --headed --project=chromium",
     "test:manual-broadcast": "TEST_ENV=local playwright test tests/pushengage/manual-broadcast-sender.spec.js --headed --project=chromium",
