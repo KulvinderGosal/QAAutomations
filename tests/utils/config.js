@@ -35,4 +35,24 @@ module.exports = {
   // Environment info
   environment: isLocal ? 'local' : 'staging',
   isLocal: isLocal,
+
+  // TypeSafe Jev (System One) decision model
+  // Used for confidence-scored, AI-assisted assertions. See tests/utils/jev-helpers.js
+  jev: {
+    apiKey: process.env.TYPESAFE_API_KEY || '',
+    baseUrl: process.env.TYPESAFE_BASE_URL || 'https://api.typesafe.ai',
+    model: process.env.JEV_MODEL || 'typesafe/jev',
+    // Minimum confidence (0..1) before an AI answer is treated as decisive.
+    minConfidence: parseFloat(process.env.JEV_MIN_CONFIDENCE) || 0.7,
+    timeout: parseInt(process.env.JEV_TIMEOUT) || 10000,
+  },
+
+  // Claude (Anthropic API) — the "System Two" escalation layer behind Jev.
+  // When Jev is not confident, Claude explains what's on the page. See tests/utils/claude-helpers.js
+  claude: {
+    apiKey: process.env.ANTHROPIC_API_KEY || '',
+    model: process.env.CLAUDE_MODEL || 'claude-opus-5',
+    maxTokens: parseInt(process.env.CLAUDE_MAX_TOKENS) || 1024,
+    timeout: parseInt(process.env.CLAUDE_TIMEOUT) || 60000,
+  },
 };
