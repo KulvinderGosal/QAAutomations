@@ -46,4 +46,13 @@ module.exports = {
     minConfidence: parseFloat(process.env.JEV_MIN_CONFIDENCE) || 0.7,
     timeout: parseInt(process.env.JEV_TIMEOUT) || 10000,
   },
+
+  // Claude (Anthropic API) — the "System Two" escalation layer behind Jev.
+  // When Jev is not confident, Claude explains what's on the page. See tests/utils/claude-helpers.js
+  claude: {
+    apiKey: process.env.ANTHROPIC_API_KEY || '',
+    model: process.env.CLAUDE_MODEL || 'claude-opus-5',
+    maxTokens: parseInt(process.env.CLAUDE_MAX_TOKENS) || 1024,
+    timeout: parseInt(process.env.CLAUDE_TIMEOUT) || 60000,
+  },
 };

@@ -10,7 +10,7 @@
     "test:headed": "playwright test --headed",
     "test:headed:single": "playwright test --headed --project=chromium",
     "test:debug": "playwright test --debug",
-    "test:smoke": "playwright test tests/pushengage-regression/critical/installation/",
+    "test:smoke": "playwright test tests/smoke/",
     "test:smoke:single": "playwright test tests/pushengage-regression/critical/installation/ --project=chromium",
     "test:wordpress-plugin": "playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js",
     "test:wordpress-plugin:single": "playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js --project=chromium",
@@ -70,12 +70,12 @@
     "playwright:install:deps": "playwright install-deps",
     "playwright:clean": "rm -rf ~/Library/Caches/ms-playwright/chromium-* ~/Library/Caches/ms-playwright/firefox-* ~/Library/Caches/ms-playwright/webkit-* && npm run playwright:install",
     "playwright:status": "playwright --version && du -sh ~/Library/Caches/ms-playwright/",
-    "test:smoke": "playwright test tests/smoke/",
     "test:smoke:fast": "playwright test tests/smoke/critical-smoke.spec.js --project=chromium --workers=5",
     "test:smoke:headed": "playwright test tests/smoke/ --headed",
     "test:regression:fast": "playwright test tests/pushengage-regression/critical/ --project=chromium --workers=10 --retries=1",
     "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1",
-    "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium"
+    "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium",
+    "test:jev:claude": "playwright test tests/examples/jev-claude-fallback.spec.js --project=chromium"
   },
   "keywords": [
     "playwright",
@@ -110,5 +110,8 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0"
   }
 }
