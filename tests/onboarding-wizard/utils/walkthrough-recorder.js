@@ -20,10 +20,25 @@ class WalkthroughRecorder {
     this.outDir = path.join(process.cwd(), 'test-results', 'onboarding-walkthrough', this.runName);
     fs.mkdirSync(this.outDir, { recursive: true });
     this.results = [];
+    this.consoleErrors = []; // { type, text, ts } captured across the whole run
     this.started = new Date();
   }
 
   _log(icon, msg) { console.log(`${icon} ${msg}`); }
+
+  /**
+   * Attach console + pageerror listeners so every case automatically flags any
+   * JS console error / uncaught exception that occurred while it ran.
+   * Call once in beforeAll with the shared page.
+   */
+  attachConsole(page) {
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') this.consoleErrors.push({ type: 'console.error', text: msg.text(), ts: Date.now(), url: page.url() });
+    });
+    page.on('pageerror', (err) => {
+      this.consoleErrors.push({ type: 'pageerror', text: err && err.message ? err.message : String(err), ts: Date.now(), url: page.url() });
+    });
+  }
 
   /**
    * Run a soft-checked case. `fn(page)` should perform the tester's checks and
@@ -32,7 +47,8 @@ class WalkthroughRecorder {
    */
   async case(page, id, title, fn, opts = {}) {
     const priority = opts.priority || '';
-    const rec = { id, title, priority, status: 'pass', note: '', screenshot: null, ts: new Date().toISOString() };
+    const rec = { id, title, priority, status: 'pass', note: '', screenshot: null, consoleErrors: 0, ts: new Date().toISOString() };
+    const errBefore = this.consoleErrors.length;
     this._log('🔎', `${id} ${priority} — ${title}`);
     try {
       const note = await fn(page);
@@ -48,6 +64,13 @@ class WalkthroughRecorder {
         rec.note = (err && err.message ? err.message : String(err)).split('\n').slice(0, 4).join(' ');
         this._log('❌', `${id} FAIL — ${rec.note}`);
       }
+    }
+    const newErrs = this.consoleErrors.slice(errBefore);
+    rec.consoleErrors = newErrs.length;
+    if (newErrs.length) {
+      const first = newErrs[0].text.split('\n')[0].slice(0, 120);
+      rec.note = (rec.note ? rec.note + ' · ' : '') + `⚠ ${newErrs.length} console error(s): ${first}`;
+      this._log('⚠️', `${id} saw ${newErrs.length} console error(s) — first: ${first}`);
     }
     rec.screenshot = await this._shot(page, id);
     this.results.push(rec);
@@ -92,21 +115,26 @@ class WalkthroughRecorder {
     md.push('');
     md.push(`Run: ${this.started.toISOString()} · ${dur}s · **${s.pass} pass · ${s.fail} fail · ${s.blocked} blocked** of ${cases.length} cases touched.`);
     md.push('');
-    md.push('| Case | Pri | Status | Note | Screenshot |');
-    md.push('|---|---|---|---|---|');
+    md.push('| Case | Pri | Status | Console | Note | Screenshot |');
+    md.push('|---|---|---|---|---|---|');
     cases.forEach((r) => {
       const icon = r.status === 'pass' ? '✅' : r.status === 'fail' ? '❌' : '⛔';
-      md.push(`| ${r.id} | ${r.priority} | ${icon} ${r.status} | ${(r.note || '').replace(/\|/g, '\\|')} | ${r.screenshot ? `\`${r.screenshot}\`` : ''} |`);
+      const con = r.consoleErrors ? `⚠ ${r.consoleErrors}` : '—';
+      md.push(`| ${r.id} | ${r.priority} | ${icon} ${r.status} | ${con} | ${(r.note || '').replace(/\|/g, '\\|')} | ${r.screenshot ? `\`${r.screenshot}\`` : ''} |`);
     });
     if (notes.length) {
       md.push('');
       md.push('## Observations');
       notes.forEach((n) => md.push(`- ${n.note}`));
     }
+    md.push('');
+    md.push(`## Console errors & page exceptions (${this.consoleErrors.length})`);
+    if (!this.consoleErrors.length) md.push('- None captured during the run.');
+    else this.consoleErrors.forEach((e) => md.push(`- \`${e.type}\` @ ${e.url || ''} — ${(e.text || '').split('\n')[0].slice(0, 200).replace(/\|/g, '\\|')}`));
     const mdPath = path.join(this.outDir, 'report.md');
     const jsonPath = path.join(this.outDir, 'report.json');
     fs.writeFileSync(mdPath, md.join('\n'));
-    fs.writeFileSync(jsonPath, JSON.stringify({ run: this.runName, started: this.started, durationSec: dur, summary: s, results: this.results }, null, 2));
+    fs.writeFileSync(jsonPath, JSON.stringify({ run: this.runName, started: this.started, durationSec: dur, summary: s, consoleErrors: this.consoleErrors, results: this.results }, null, 2));
     this._log('📄', `Report: ${path.relative(process.cwd(), mdPath)}  (${s.pass}✅ ${s.fail}❌ ${s.blocked}⛔)`);
     return { mdPath, jsonPath, summary: s };
   }

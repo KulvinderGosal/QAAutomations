@@ -36,6 +36,7 @@ test.describe.serial('Manual walkthrough — signup → wizard → all tracks', 
     page = await context.newPage();
     page.setDefaultTimeout(cfg.timeouts.action);
     rec = new WalkthroughRecorder(`walkthrough-${PLAN}-${Date.now()}`);
+    rec.attachConsole(page); // every case auto-flags console errors / page exceptions
   });
 
   test.afterAll(async () => {
@@ -219,8 +220,30 @@ test.describe.serial('Manual walkthrough — signup → wizard → all tracks', 
     }
   });
 
+  // --------------------------------------------------------------- responsive
+  test('Phase 4 — responsive sweep of the wizard', async () => {
+    test.setTimeout(120000);
+    const widths = [[1440, 900], [1024, 768], [768, 1024], [375, 812]];
+    await wiz.goto(page, wiz.routes.picker).catch(() => {});
+    for (const [w, h] of widths) {
+      await rec.case(page, `R1-${w}`, `Wizard at ${w}px — no horizontal scroll, footer usable`, async (p) => {
+        await p.setViewportSize({ width: w, height: h });
+        await p.waitForTimeout(600);
+        // screenshot per width for the visual/responsive review
+        await p.screenshot({ path: require('path').join(rec.outDir, `R1-${w}.png`), fullPage: true }).catch(() => {});
+        const overflow = await p.evaluate(() => {
+          const el = document.scrollingElement || document.documentElement;
+          return el.scrollWidth - el.clientWidth;
+        });
+        if (overflow > 2) throw new Error(`horizontal overflow of ${overflow}px at ${w}px width`);
+        return `no horizontal scroll at ${w}px`;
+      }, { priority: 'P1' });
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+  });
+
   // --------------------------------------------------------------- telemetry
-  test('Phase 4 — telemetry sanity on the captured dataLayer', async () => {
+  test('Phase 5 — telemetry sanity on the captured dataLayer', async () => {
     await rec.case(page, 'P1', 'Onboarding telemetry events were emitted', async (p) => {
       const all = wiz.onboardingEvents(await wiz.getTelemetry(p));
       const names = [...new Set(all.map((e) => e.event || e.eventName).filter(Boolean))];
