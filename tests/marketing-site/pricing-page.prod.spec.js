@@ -94,6 +94,26 @@ test.describe('PushEngage Pricing Page (Production)', () => {
     // Do NOT submit — leave production clean.
   });
 
+  test('PE-MKT-PRICING-006: all four plan CTAs navigate to a working signup page', async ({ page }) => {
+    const plans = [
+      { label: 'Try it free', slug: 'free' },
+      { label: 'Get Growth', slug: 'growth' },
+      { label: 'Get Premium', slug: 'premium' },
+      { label: 'Get Business', slug: 'business' },
+    ];
+    for (const plan of plans) {
+      await page.goto(PRICING, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(3000);
+      await dismissCookie(page);
+      const link = page.locator(`a:has-text("${plan.label}")`).first();
+      await link.scrollIntoViewIfNeeded().catch(() => {});
+      await Promise.all([page.waitForNavigation({ timeout: 30000 }).catch(() => {}), link.click()]);
+      await page.waitForTimeout(3000);
+      expect(page.url(), `${plan.label} should land on signup for ${plan.slug}`).toContain(`planName=${plan.slug}`);
+      await expect(page.locator('input[type="email"]').first(), `signup form renders for ${plan.slug}`).toBeVisible();
+    }
+  });
+
   test('PE-MKT-PRICING-004: monthly/yearly toggle updates displayed pricing', async ({ page }) => {
     await page.goto(PRICING, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
