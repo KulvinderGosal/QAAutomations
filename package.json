@@ -90,7 +90,10 @@
     "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium",
     "test:jev:claude": "playwright test tests/examples/jev-claude-fallback.spec.js --project=chromium",
     "test:internal:refresh": "playwright test --config=playwright-internal-dashboard.config.js",
-    "test:internal:refresh:slow": "RUN_SLOW=1 playwright test --config=playwright-internal-dashboard.config.js"
+    "test:internal:refresh:slow": "RUN_SLOW=1 playwright test --config=playwright-internal-dashboard.config.js",
+    "test:ledgerport": "playwright test --config=playwright-ledgerport.config.js",
+    "test:ledgerport:smoke": "playwright test tests/ledgerport-regression/specs/smoke/ --config=playwright-ledgerport.config.js",
+    "test:ledgerport:regression": "playwright test tests/ledgerport-regression/specs/regression/ --config=playwright-ledgerport.config.js"
   },
   "keywords": [
     "playwright",
