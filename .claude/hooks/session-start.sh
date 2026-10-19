@@ -12,7 +12,8 @@ fi
 # Browsers are pre-installed in the cloud image; don't download them again
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
-npm install --no-audit --no-fund
+# --no-save keeps package-lock.json untouched so sessions don't leave stray diffs
+npm install --no-audit --no-fund --no-save
 
 # playwright.config.js runs the chromium project on Google Chrome (channel: 'chrome'),
 # which the cloud image doesn't include
