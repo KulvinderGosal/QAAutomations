@@ -88,7 +88,9 @@
     "test:onboarding:walkthrough:headed": "playwright test tests/onboarding-wizard/walkthrough/ --config=playwright-onboarding.config.js --project=chromium --headed",
     "test:onboarding:report": "playwright show-report test-results/onboarding-report",
     "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium",
-    "test:jev:claude": "playwright test tests/examples/jev-claude-fallback.spec.js --project=chromium"
+    "test:jev:claude": "playwright test tests/examples/jev-claude-fallback.spec.js --project=chromium",
+    "test:internal:refresh": "playwright test --config=playwright-internal-dashboard.config.js",
+    "test:internal:refresh:slow": "RUN_SLOW=1 playwright test --config=playwright-internal-dashboard.config.js"
   },
   "keywords": [
     "playwright",
