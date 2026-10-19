@@ -10,14 +10,15 @@
     "test:headed": "playwright test --headed",
     "test:headed:single": "playwright test --headed --project=chromium",
     "test:debug": "playwright test --debug",
-    "test:smoke": "playwright test tests/pushengage-regression/critical/installation/",
+    "test:marketing": "playwright test --config playwright-marketing.config.js",
+    "test:smoke": "playwright test tests/smoke/",
     "test:smoke:single": "playwright test tests/pushengage-regression/critical/installation/ --project=chromium",
     "test:wordpress-plugin": "playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js",
     "test:wordpress-plugin:single": "playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js --project=chromium",
     "test:pushengage": "playwright test tests/pushengage/",
     "test:pushengage:single": "playwright test tests/pushengage/ --project=chromium",
     "test:broadcast": "playwright test tests/pushengage/broadcast-test.spec.js --project=chromium",
-    "test:send-broadcast": "playwright test tests/pushengage/send-broadcast.spec.js --project=chromium",
+    "test:send-broadcast": "playwright test tests/pushengage-regression/critical/push-broadcasts/04-send-broadcast.spec.js --project=chromium",
     "test:auto-broadcast": "TEST_ENV=local playwright test tests/pushengage/auto-send-broadcast.spec.js --project=chromium",
     "test:auto-broadcast:headed": "TEST_ENV=local playwright test tests/pushengage/auto-send-broadcast.spec.js --headed --project=chromium",
     "test:manual-broadcast": "TEST_ENV=local playwright test tests/pushengage/manual-broadcast-sender.spec.js --headed --project=chromium",
@@ -70,11 +71,29 @@
     "playwright:install:deps": "playwright install-deps",
     "playwright:clean": "rm -rf ~/Library/Caches/ms-playwright/chromium-* ~/Library/Caches/ms-playwright/firefox-* ~/Library/Caches/ms-playwright/webkit-* && npm run playwright:install",
     "playwright:status": "playwright --version && du -sh ~/Library/Caches/ms-playwright/",
-    "test:smoke": "playwright test tests/smoke/",
     "test:smoke:fast": "playwright test tests/smoke/critical-smoke.spec.js --project=chromium --workers=5",
     "test:smoke:headed": "playwright test tests/smoke/ --headed",
     "test:regression:fast": "playwright test tests/pushengage-regression/critical/ --project=chromium --workers=10 --retries=1",
-    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1"
+    "test:regression:parallel": "playwright test tests/pushengage-regression/ --project=chromium --workers=20 --retries=1",
+    "onboarding:checklist": "node scripts/gen-onboarding-checklist.js",
+    "test:onboarding": "playwright test --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:headed": "playwright test --config=playwright-onboarding.config.js --project=chromium --headed",
+    "test:onboarding:debug": "playwright test --config=playwright-onboarding.config.js --project=chromium --debug",
+    "test:onboarding:p0": "playwright test --config=playwright-onboarding.config.js --project=chromium --grep @P0",
+    "test:onboarding:web": "playwright test tests/onboarding-wizard/web-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:chat": "playwright test tests/onboarding-wizard/chat-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:app": "playwright test tests/onboarding-wizard/app-track/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:backend": "playwright test tests/onboarding-wizard/backend/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:walkthrough": "playwright test tests/onboarding-wizard/walkthrough/ --config=playwright-onboarding.config.js --project=chromium",
+    "test:onboarding:walkthrough:headed": "playwright test tests/onboarding-wizard/walkthrough/ --config=playwright-onboarding.config.js --project=chromium --headed",
+    "test:onboarding:report": "playwright show-report test-results/onboarding-report",
+    "test:jev": "playwright test tests/examples/jev-decision.spec.js --project=chromium",
+    "test:jev:claude": "playwright test tests/examples/jev-claude-fallback.spec.js --project=chromium",
+    "test:internal:refresh": "playwright test --config=playwright-internal-dashboard.config.js",
+    "test:internal:refresh:slow": "RUN_SLOW=1 playwright test --config=playwright-internal-dashboard.config.js",
+    "test:ledgerport": "playwright test --config=playwright-ledgerport.config.js",
+    "test:ledgerport:smoke": "playwright test tests/ledgerport-regression/specs/smoke/ --config=playwright-ledgerport.config.js",
+    "test:ledgerport:regression": "playwright test tests/ledgerport-regression/specs/regression/ --config=playwright-ledgerport.config.js"
   },
   "keywords": [
     "playwright",
@@ -109,5 +128,8 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0"
   }
 }
