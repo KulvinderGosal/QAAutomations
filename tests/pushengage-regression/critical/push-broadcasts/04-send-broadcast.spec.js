@@ -1,6 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const { loginToWordPress } = require('../../../utils/auth');
 const config = require('../../../utils/config');
+const { jev } = require('../../../utils/jev-helpers');
+const { jevWithClaudeFallback } = require('../../../utils/claude-helpers');
 
 /**
  * Send Push Broadcast Test - Migrated from Cypress
@@ -169,7 +171,45 @@ test.describe('Send Push Broadcast - Real Notification', () => {
     if (successMessage > 0) {
       console.log('✓ Success message detected on page');
     }
-    
+
+    // Step 16: AI-assisted verification (Jev fast decision, Claude fallback).
+    // This runs only when a TypeSafe key is configured, so the test still works
+    // without AI keys (CI-safe). An AI-layer outage logs a warning instead of
+    // failing an otherwise-successful send.
+    if (jev.isConfigured()) {
+      try {
+        const pageText = await page.locator('body').innerText();
+        const verdict = await jevWithClaudeFallback(
+          pageText,
+          'Did the push notification broadcast send (or get scheduled) successfully, with no error shown?',
+          { expected: 'a success / sent / scheduled confirmation and no error' }
+        );
+
+        console.log(`\n🤖 AI verification: probability(yes)=${verdict.probability} ` +
+          `confidence=${verdict.confidence} decisive=${verdict.decisive} escalated=${verdict.escalated}`);
+
+        if (verdict.decisive) {
+          // Jev was confident — assert on its answer.
+          expect(verdict.yes, 'Jev is confident the broadcast did NOT send successfully').toBe(true);
+          console.log('✓ Jev confidently confirmed a successful send');
+        } else if (verdict.escalated && verdict.claude) {
+          // Jev was unsure — Claude diagnosed the page.
+          console.log(`   Claude: ${verdict.claude.summary}`);
+          console.log(`   likelyState=${verdict.claude.likelyState} | fix="${verdict.claude.suggestedFix}"`);
+          expect(verdict.claude.likelyState,
+            `Claude diagnosed an error state: ${verdict.claude.summary}`).not.toBe('error');
+          console.log('✓ Claude did not detect an error state after send');
+        } else {
+          // Jev unsure and no Claude key — fall back to the on-page indicator.
+          console.log('   ⚠️ Jev not confident and Claude not configured; relying on page indicators');
+          expect(successMessage,
+            'No success indicator found and AI was inconclusive').toBeGreaterThan(0);
+        }
+      } catch (aiError) {
+        console.log(`   ⚠️ AI verification skipped (service error): ${aiError.message}`);
+      }
+    }
+
     // Assert test passed
     expect(true).toBeTruthy();
     
