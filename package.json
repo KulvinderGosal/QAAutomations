@@ -10,6 +10,7 @@
     "test:headed": "playwright test --headed",
     "test:headed:single": "playwright test --headed --project=chromium",
     "test:debug": "playwright test --debug",
+    "test:marketing": "playwright test --config playwright-marketing.config.js",
     "test:smoke": "playwright test tests/pushengage-regression/critical/installation/",
     "test:smoke:single": "playwright test tests/pushengage-regression/critical/installation/ --project=chromium",
     "test:wordpress-plugin": "playwright test tests/pushengage-regression/critical/installation/02-plugin-smoke-test.spec.js",
