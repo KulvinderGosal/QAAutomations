@@ -28,6 +28,11 @@ the internal dashboard, the onboarding wizard and the marketing site. Also holds
 `playwright.config.js` has `testDir: './tests'`, so with no path it also picks up the other suites' folders.
 Always pass a path, or `-c` for the suite's own config.
 
+## Agents (`.claude/agents/`)
+Delegate to keep the main context small: `test-runner` (run a target, short summary), `flaky-test-investigator`
+(root-cause one failing test), `selector-fixer` (repair locators after UI changes), `coverage-mapper`
+(requirements vs existing tests, read-only).
+
 ## Shared code
 - `tests/utils/config.js`: env-driven settings (`TEST_ENV=local` switches to the local WP site).
 - `tests/utils/auth.js`: `loginToWordPress(page)` and other login helpers.
