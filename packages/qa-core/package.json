@@ -1,0 +1,12 @@
+{
+  "name": "@qa-automations/qa-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared QA contracts: BLOCKED errors, target guard, in-process API clients, fixtures registry, auth:probe contract. Zero runtime deps; never imports @playwright/test at runtime.",
+  "main": "index.ts",
+  "scripts": {
+    "typecheck": "../../TestPilot/node_modules/.bin/tsc -p tsconfig.json",
+    "selftest": "../../TestPilot/node_modules/.bin/tsx selftest/run.ts",
+    "check": "npm run typecheck && npm run selftest"
+  }
+}

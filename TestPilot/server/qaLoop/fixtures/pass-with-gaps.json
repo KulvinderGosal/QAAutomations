@@ -1,0 +1,18 @@
+{
+  "suites": [
+    {
+      "title": "b.spec.ts",
+      "file": "b.spec.ts",
+      "specs": [
+        { "title": "t1", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "t2", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "t3", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "t4", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "flaky", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed", "error": { "message": "timeout" } }, { "status": "passed" }] }] },
+        { "title": "known broken", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "fixme" }], "results": [{ "status": "skipped" }] }] },
+        { "title": "known broken 2", "file": "b.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "fixme" }], "results": [{ "status": "skipped" }] }] }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 3, "skipped": 2, "unexpected": 0, "flaky": 1, "duration": 4000 }
+}

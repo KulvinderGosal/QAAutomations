@@ -1,0 +1,17 @@
+{
+  "suites": [
+    {
+      "title": "a.spec.ts",
+      "file": "a.spec.ts",
+      "specs": [
+        { "title": "t1", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "t2", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "t3", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "skip", "description": "Cloudflare challenge - Just a moment..." }], "results": [{ "status": "skipped" }] }] },
+        { "title": "t4", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "skip", "description": "Cloudflare challenge - Just a moment..." }], "results": [{ "status": "skipped" }] }] },
+        { "title": "t5", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 3, "skipped": 2, "unexpected": 0, "flaky": 0, "duration": 4000 }
+}

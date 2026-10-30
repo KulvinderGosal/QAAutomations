@@ -1,0 +1,31 @@
+{
+  "suites": [
+    {
+      "title": "a.spec.ts",
+      "file": "a.spec.ts",
+      "specs": [
+        { "title": "passes", "file": "a.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        {
+          "title": "fails",
+          "file": "a.spec.ts",
+          "tags": [],
+          "ok": false,
+          "tests": [{ "status": "unexpected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed",
+            "error": { "message": "Error: expect(received).toBe(expected)\n\nExpected: 2\nReceived: 1" },
+            "errors": [{ "message": "Error: expect(received).toBe(expected)\n\nExpected: 2\nReceived: 1\n\n> 5 | test('fails', async () => { expect(1).toBe(2); });\n    |                                       ^\n  6 | test('blocked', async () => { throw new Error('[BLOCKED:SESSION/expired] token expired -- human action: npm run auth:capture'); });\n" }] }] }]
+        },
+        {
+          "title": "blocked",
+          "file": "a.spec.ts",
+          "tags": [],
+          "ok": false,
+          "tests": [{ "status": "unexpected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed",
+            "error": { "message": "Error: [BLOCKED:SESSION/expired] token expired -- human action: npm run auth:capture" },
+            "errors": [{ "message": "Error: [BLOCKED:SESSION/expired] token expired -- human action: npm run auth:capture\n\n> 6 | test('blocked', async () => { throw new Error('[BLOCKED:SESSION/expired] token expired -- human action: npm run auth:capture'); });\n" }] }] }]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 1, "skipped": 0, "unexpected": 2, "flaky": 0, "duration": 700 }
+}

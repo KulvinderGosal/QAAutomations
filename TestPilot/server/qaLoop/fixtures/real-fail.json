@@ -1,0 +1,15 @@
+{
+  "suites": [
+    {
+      "title": "checkout.spec.ts",
+      "file": "checkout.spec.ts",
+      "specs": [
+        { "title": "shows plans", "file": "checkout.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "price matches API", "file": "checkout.spec.ts", "tags": [], "ok": false, "tests": [{ "status": "unexpected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed", "error": { "message": "Error: \u001b[2mexpect(\u001b[22mreceived).toBe(expected)\n\nExpected: \"$49.40\"\nReceived: \"$76\"" } }] }] },
+        { "title": "blocked by session", "file": "checkout.spec.ts", "tags": [], "ok": false, "tests": [{ "status": "unexpected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed", "error": { "message": "BlockedSessionError: [BLOCKED:SESSION/expired] access token expired -- human action: LP_ENV=staging npm run auth:capture in ledgerport-saas-automation" } }] }] }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 1, "skipped": 0, "unexpected": 2, "flaky": 0, "duration": 5000 }
+}
