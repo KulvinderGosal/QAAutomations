@@ -1,0 +1,6 @@
+{
+  "config": {},
+  "suites": [],
+  "errors": [{ "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files." }],
+  "stats": { "startTime": "2026-10-12T04:00:00.000Z", "duration": 412.1, "expected": 0, "skipped": 0, "unexpected": 0, "flaky": 0 }
+}

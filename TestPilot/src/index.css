@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+/* Class-based dark mode: TestPilot toggles `.dark` on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --foreground: oklch(0.16 0.008 265);
+  --ink-1: oklch(0.17 0.01 265); /* strong body text — near-black, crisp */
+  --ink-2: oklch(0.33 0.012 265); /* secondary text */
+  --muted-foreground: oklch(0.46 0.014 265); /* clearer than the old washed grey */
+  --border: oklch(0.87 0.008 265); /* darker + cool → visible definition */
+
+  --app-background: oklch(0.965 0.005 265);
+  --card: #fff;
+  --surface-1: oklch(0.98 0.004 265); /* subtle hover */
+  --surface-2: oklch(0.948 0.006 265); /* muted panels */
+  --surface-3: oklch(0.91 0.009 265); /* chips / tracks */
+
+  --primary: oklch(0.52 0.21 272); /* vivid indigo */
+  --primary-foreground: #fff;
+
+  /* Overview hero gradient — a clear indigo wash (dark text stays readable) */
+  --hero-1: oklch(0.9 0.08 272);
+  --hero-2: oklch(0.91 0.07 288);
+  --hero-3: oklch(0.93 0.05 250);
+
+  --info: oklch(0.54 0.18 255);
+  --info-surface: oklch(0.96 0.03 255);
+  --success: oklch(0.55 0.13 175);
+  --success-surface: oklch(0.96 0.03 175);
+  --caution: oklch(0.66 0.16 80);
+  --caution-surface: oklch(0.97 0.06 90);
+  --warning: oklch(0.65 0.18 45);
+  --warning-surface: oklch(0.97 0.05 45);
+  --emphasis: oklch(0.5 0.2 270);
+  --emphasis-surface: oklch(0.96 0.02 270);
+  --magic: oklch(0.6 0.18 300);
+  --magic-surface: oklch(0.97 0.03 300);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-surface: oklch(0.975 0.015 27);
+
+  --brand-pushengage: oklch(0.5 0.17 255);
+  --brand-pushengage-surface: oklch(0.96 0.04 255);
+  --brand-ledgerport: oklch(0.4 0.07 167);
+  --brand-ledgerport-surface: oklch(0.96 0.02 167);
+
+  --scrollbar: oklch(0.82 0.006 265);
+  --scrollbar-hover: oklch(0.72 0.008 265);
+
+  --radius-card: 14px;
+  --radius-control: 9px;
+  --radius-chip: 7px;
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Sora", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Dark theme — a cool blue-charcoal. Only the raw vars change; every
+   token-based utility below re-derives automatically. */
+.dark {
+  --foreground: oklch(0.97 0.005 265);
+  --ink-1: oklch(0.97 0.005 265);
+  --ink-2: oklch(0.79 0.01 265);
+  --muted-foreground: oklch(0.67 0.012 265);
+  --border: oklch(0.4 0.016 265); /* more visible definition */
+
+  /* soft charcoal, cool — not near-black, not faded */
+  --app-background: oklch(0.205 0.014 265);
+  --card: oklch(0.25 0.015 265);
+  --surface-1: oklch(0.285 0.016 265);
+  --surface-2: oklch(0.33 0.018 265);
+  --surface-3: oklch(0.38 0.02 265);
+
+  --primary: oklch(0.7 0.17 274); /* bright vivid indigo */
+  --primary-foreground: oklch(0.17 0.03 274);
+
+  --hero-1: oklch(0.33 0.11 272);
+  --hero-2: oklch(0.3 0.1 288);
+  --hero-3: oklch(0.27 0.08 250);
+
+  /* Brighter base colors + darker tints for chips/badges on the dark surface. */
+  --info: oklch(0.72 0.15 255);
+  --info-surface: oklch(0.3 0.06 255);
+  --success: oklch(0.74 0.13 170);
+  --success-surface: oklch(0.3 0.06 170);
+  --caution: oklch(0.8 0.14 85);
+  --caution-surface: oklch(0.32 0.07 85);
+  --warning: oklch(0.76 0.16 50);
+  --warning-surface: oklch(0.32 0.08 45);
+  --emphasis: oklch(0.72 0.16 275);
+  --emphasis-surface: oklch(0.3 0.08 275);
+  --magic: oklch(0.76 0.16 300);
+  --magic-surface: oklch(0.32 0.08 300);
+  --destructive: oklch(0.72 0.19 25);
+  --destructive-surface: oklch(0.32 0.1 25);
+
+  --brand-pushengage: oklch(0.72 0.16 255);
+  --brand-pushengage-surface: oklch(0.32 0.09 255);
+  --brand-ledgerport: oklch(0.72 0.1 167);
+  --brand-ledgerport-surface: oklch(0.3 0.05 167);
+
+  --scrollbar: oklch(0.4 0.01 265);
+  --scrollbar-hover: oklch(0.5 0.01 265);
+}
+
+@theme inline {
+  --color-foreground: var(--foreground);
+  --color-ink-1: var(--ink-1);
+  --color-ink-2: var(--ink-2);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-app-background: var(--app-background);
+  --color-card: var(--card);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-hero-1: var(--hero-1);
+  --color-hero-2: var(--hero-2);
+  --color-hero-3: var(--hero-3);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-info: var(--info);
+  --color-info-surface: var(--info-surface);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-caution: var(--caution);
+  --color-caution-surface: var(--caution-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-emphasis: var(--emphasis);
+  --color-emphasis-surface: var(--emphasis-surface);
+  --color-magic: var(--magic);
+  --color-magic-surface: var(--magic-surface);
+  --color-destructive: var(--destructive);
+  --color-destructive-surface: var(--destructive-surface);
+
+  --color-brand-pushengage: var(--brand-pushengage);
+  --color-brand-pushengage-surface: var(--brand-pushengage-surface);
+  --color-brand-ledgerport: var(--brand-ledgerport);
+  --color-brand-ledgerport-surface: var(--brand-ledgerport-surface);
+
+  --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
+  --radius-chip: var(--radius-chip);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  background: var(--app-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01"; /* Inter's crisper single-storey a / rounded shapes */
+}
+
+/* Page/hero titles get the display face + tight tracking for a sharper look. */
+h1 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+#root {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 8px;
+  border: 2px solid var(--app-background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+@keyframes cp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes cp-toast {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cp-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes cp-bar {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 28px 0;
+  }
+}
+
+.cp-spin {
+  animation: cp-spin 0.8s linear infinite;
+}
+.cp-pulse {
+  animation: cp-pulse 1.4s ease-in-out infinite;
+}
+.cp-toast-in {
+  animation: cp-toast 0.2s ease-out;
+}
+.cp-pop-in {
+  animation: cp-pop 0.14s ease-out;
+}
+.cp-striped {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 0,
+    rgba(255, 255, 255, 0.25) 6px,
+    transparent 6px,
+    transparent 14px
+  );
+  animation: cp-bar 0.8s linear infinite;
+}
+
+.cp-card-hover {
+  transition: box-shadow 0.15s ease;
+}
+.cp-card-hover:hover {
+  box-shadow:
+    0 4px 8px -2px rgba(15, 23, 42, 0.08),
+    0 2px 4px -2px rgba(15, 23, 42, 0.06),
+    inset 0 0 0 1px rgba(15, 23, 42, 0.1);
+}

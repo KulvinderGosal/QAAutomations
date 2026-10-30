@@ -1,0 +1,15 @@
+{
+  "suites": [
+    {
+      "title": "health.spec.ts",
+      "file": "health.spec.ts",
+      "specs": [
+        { "title": "home is up @smoke", "file": "health.spec.ts", "tags": ["smoke"], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "pricing is up", "file": "health.spec.ts", "tags": ["case:TC-7"], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "docs is up", "file": "health.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 3, "skipped": 0, "unexpected": 0, "flaky": 0, "duration": 3100 }
+}

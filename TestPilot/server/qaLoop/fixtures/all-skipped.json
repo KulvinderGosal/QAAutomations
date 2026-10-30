@@ -1,0 +1,26 @@
+{
+  "suites": [
+    {
+      "title": "dashboard.spec.ts",
+      "file": "dashboard.spec.ts",
+      "specs": [
+        {
+          "title": "loads the dashboard",
+          "file": "dashboard.spec.ts",
+          "tags": ["smoke"],
+          "ok": true,
+          "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "skip", "description": "No saved session - run npm run auth:capture (login required)" }], "results": [{ "status": "skipped", "annotations": [] }] }]
+        },
+        {
+          "title": "lists campaigns",
+          "file": "dashboard.spec.ts",
+          "tags": ["smoke"],
+          "ok": true,
+          "tests": [{ "status": "skipped", "expectedStatus": "skipped", "annotations": [{ "type": "skip", "description": "No saved session - run npm run auth:capture (login required)" }], "results": [{ "status": "skipped" }] }]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 0, "skipped": 2, "unexpected": 0, "flaky": 0, "duration": 1200 }
+}

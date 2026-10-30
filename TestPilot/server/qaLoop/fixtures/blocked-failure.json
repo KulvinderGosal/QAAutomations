@@ -1,0 +1,14 @@
+{
+  "suites": [
+    {
+      "title": "api.spec.ts",
+      "file": "api.spec.ts",
+      "specs": [
+        { "title": "lists sites", "file": "api.spec.ts", "tags": [], "ok": true, "tests": [{ "status": "expected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "passed" }] }] },
+        { "title": "reads orders", "file": "api.spec.ts", "tags": [], "ok": false, "tests": [{ "status": "unexpected", "expectedStatus": "passed", "annotations": [], "results": [{ "status": "failed", "error": { "message": "Error: [BLOCKED:ENV/waf] Cloudflare challenge on api-staging -- human action: load staging once in a normal Chrome tab, then re-run" } }] }] }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": { "expected": 1, "skipped": 0, "unexpected": 1, "flaky": 0, "duration": 2000 }
+}
