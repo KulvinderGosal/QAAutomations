@@ -1,0 +1,28 @@
+{
+  "name": "ledgerport-saas-automation",
+  "version": "1.0.0",
+  "description": "Playwright E2E/regression tests for the LedgerPort SaaS dashboard (staging + production)",
+  "scripts": {
+    "test": "playwright test",
+    "test:staging": "cross-env LP_ENV=staging playwright test",
+    "test:prod": "cross-env LP_ENV=production playwright test",
+    "test:public": "playwright test public/",
+    "test:auth": "playwright test authenticated/",
+    "test:safe": "playwright test --grep-invert @destructive",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "auth:capture": "cross-env LP_ENV=staging node scripts/capture-auth.mjs",
+    "auth:capture:prod": "cross-env LP_ENV=production node scripts/capture-auth.mjs",
+    "auth:probe": "../TestPilot/node_modules/.bin/tsx scripts/auth-probe.ts",
+    "auth:spike-a": "../TestPilot/node_modules/.bin/tsx scripts/spike-a-refresh.ts",
+    "report": "playwright show-report",
+    "test:signup": "cross-env LP_ENV=staging HEADED=1 playwright test tests/public/signup-onboarding.spec.ts",
+    "test:smoke:report": "playwright test --grep @smoke --reporter=list,./reporters/smoke-report.js",
+    "test:crossbrowser": "cross-env LP_ENV=staging playwright test tests/authenticated/shell.spec.ts --project=authenticated-staging --project=firefox-staging --project=webkit-staging --reporter=list"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5"
+  }
+}

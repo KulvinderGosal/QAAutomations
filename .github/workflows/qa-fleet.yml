@@ -1,0 +1,159 @@
+# QA fleet — public, read-only production checks, reported with TestPilot's honest verdict.
+#
+#   * Runs Sun/Wed 12:30 IST on a schedule (smoke only) or on demand (workflow_dispatch).
+#   * Three legs: pushengage-site, ledgerport-marketing-site, ledgerport-saas-automation.
+#   * Each leg's Playwright JSON goes through TestPilot/scripts/ci-verdict.ts (the V1 verdict
+#     floor: PASS / PASS_WITH_GAPS / FAIL / BLOCKED). A missing/empty result is BLOCKED, never PASS.
+#   * Only verdict.json is uploaded (the repo is public: no reports, traces or raw results).
+#   * No pull_request / pull_request_target triggers. No form submission, no OTP, no signup.
+name: QA fleet
+
+on:
+  schedule:
+    - cron: '0 7 * * 0,3'
+  workflow_dispatch:
+    inputs:
+      leg:
+        description: Which leg to run
+        type: choice
+        default: all
+        options:
+          - all
+          - pushengage-site
+          - ledgerport-marketing-site
+          - ledgerport-saas-automation
+      script:
+        description: Override the npm script (blank = the leg's default). test:scheduled:prod or test:public only.
+        type: string
+        default: ''
+      regression:
+        description: After a green smoke, also run test:regression (only for legs that declare it)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Picks the legs to run. (The `matrix` context is not available in a job-level `if`, so the
+  # filter lives here and feeds the matrix `include` below.)
+  select:
+    name: select legs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      legs: ${{ steps.pick.outputs.legs }}
+    steps:
+      - id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          LEG_INPUT: ${{ inputs.leg }}
+        run: |
+          node -e '
+            const legs = [
+              { id: "pushengage-site", dir: "pushengage-site", script: "test:scheduled:prod", lpsite: false },
+              { id: "ledgerport-marketing-site", dir: "lp-site", script: "test:scheduled:prod", lpsite: true },
+              { id: "ledgerport-saas-automation", dir: "ledgerport-saas-automation", script: "test:public", lpsite: false },
+            ];
+            const want = process.env.EVENT === "workflow_dispatch" ? process.env.LEG_INPUT : "all";
+            const picked = want === "all" ? legs : legs.filter((l) => l.id === want);
+            if (!picked.length) { console.error("::error::unknown leg"); process.exit(1); }
+            require("fs").appendFileSync(process.env.GITHUB_OUTPUT, "legs=" + JSON.stringify(picked) + "\n");
+          '
+
+  qa:
+    name: qa (${{ matrix.id }})
+    needs: select
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency: qa-${{ matrix.id }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.select.outputs.legs) }}
+    defaults:
+      run:
+        working-directory: ${{ matrix.dir }}
+    steps:
+      - name: Checkout this repo (framework code + the verdict CLI)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout the LedgerPort marketing-site repo (read-only token)
+        if: ${{ matrix.lpsite }}
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: awesomemotive/pushengage-ledgerport-site
+          token: ${{ secrets.LP_SITE_READ_TOKEN }}
+          path: lp-site
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Resolve the npm script (allowlist)
+        id: script
+        env:
+          SCRIPT_INPUT: ${{ inputs.script }}
+          LEG_SCRIPT: ${{ matrix.script }}
+        run: |
+          SCRIPT="${SCRIPT_INPUT:-$LEG_SCRIPT}"
+          case "$SCRIPT" in
+            test:scheduled:prod|test:public) ;;
+            *) echo "::error::script not allowed"; exit 1;;
+          esac
+          if ! node -e 'process.exit(require("./package.json").scripts?.[process.argv[1]] ? 0 : 1)' "$SCRIPT"; then
+            echo "::error::this leg does not declare $SCRIPT"
+            exit 1
+          fi
+          echo "script=$SCRIPT" >> "$GITHUB_OUTPUT"
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # Stage 1 — smoke (the public script). Scheduled runs stop here.
+      - name: Smoke (${{ steps.script.outputs.script }})
+        id: smoke
+        env:
+          CI: "1"
+          SCRIPT: ${{ steps.script.outputs.script }}
+          PLAYWRIGHT_JSON_OUTPUT_NAME: ${{ runner.temp }}/results.json
+        run: npm run "$SCRIPT" -- --reporter=list,json --trace=off
+
+      # Stage 2 — regression: manual dispatch only, after a green smoke, only if declared.
+      - name: Regression (dispatch only, after a green smoke)
+        id: regression
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.regression == true && steps.smoke.outcome == 'success' }}
+        env:
+          CI: "1"
+          PLAYWRIGHT_JSON_OUTPUT_NAME: ${{ runner.temp }}/results-regression.json
+        run: |
+          if ! node -e 'process.exit(require("./package.json").scripts?.["test:regression"] ? 0 : 1)'; then
+            echo "::notice::this leg declares no test:regression - smoke only"
+            exit 0
+          fi
+          echo "ran=true" >> "$GITHUB_OUTPUT"
+          npm run test:regression -- --reporter=list,json --trace=off
+
+      # Always report the honest verdict of the deciding stage (regression if it ran, else smoke).
+      - name: TestPilot verdict
+        if: ${{ always() }}
+        env:
+          REGRESSION_RAN: ${{ steps.regression.outputs.ran }}
+        run: |
+          RESULTS="${{ runner.temp }}/results.json"
+          STAGE=smoke
+          if [ "$REGRESSION_RAN" = "true" ]; then RESULTS="${{ runner.temp }}/results-regression.json"; STAGE=regression; fi
+          echo "Deciding stage: $STAGE" >> "$GITHUB_STEP_SUMMARY"
+          npx --yes tsx@4.23.13 $GITHUB_WORKSPACE/TestPilot/scripts/ci-verdict.ts "$RESULTS" --leg ${{ matrix.id }} --out "${{ runner.temp }}/verdict.json"
+
+      - name: Upload verdict.json only
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verdict-${{ matrix.id }}
+          path: ${{ runner.temp }}/verdict.json
+          if-no-files-found: warn
+          retention-days: 14

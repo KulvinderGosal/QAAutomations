@@ -36,3 +36,18 @@ temp/
 # OS files
 Thumbs.db
 .DS_Store
+
+# --- qa-fleet CI branch: never publish local QA data / secrets (SPEC §6.4) ---
+# (anchored: an unanchored `config/` would also hide ledgerport-saas-automation/config/env.ts, which the suite imports)
+/config/
+testpilot-qa-records/
+testpilot-device-reports/
+testpilot-run-evidence/
+TestPilot-HostReady/
+**/smoke-reports/
+**/.auth/
+**/.env*
+
+# Not run by CI and not publish-safe (ci/qa-fleet publish set)
+/ledgerport-saas-automation/tests/_ported-from-app-staging/
+/pushengage-site/legacy/

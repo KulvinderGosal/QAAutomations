@@ -1,0 +1,42 @@
+{
+  "name": "pushengage-site-regression",
+  "version": "1.0.0",
+  "description": "Playwright regression tests for the PushEngage website",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:critical": "npx playwright test tests/critical --reporter=list",
+    "test:high": "npx playwright test tests/high --reporter=list",
+    "test:medium": "npx playwright test tests/medium --reporter=list",
+    "test:low": "npx playwright test tests/low --reporter=list",
+    "test:smoke": "npx playwright test --grep @smoke --reporter=list",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "report": "npx playwright show-report",
+    "test:staging": "TEST_ENV=staging npx playwright test",
+    "test:prod": "TEST_ENV=production npx playwright test",
+    "test:smoke:staging": "TEST_ENV=staging npx playwright test --grep @smoke --reporter=list",
+    "test:smoke:prod": "TEST_ENV=production npx playwright test --grep @smoke --reporter=list",
+    "test:demo": "npx playwright test tests/high/04-schedule-demo.spec.js --reporter=list",
+    "test:routing": "npx playwright test tests/critical/06-menu-routing.spec.js --reporter=list",
+    "test:surveys": "npx playwright test tests/high/05-user-survey.spec.js tests/high/06-affiliate-survey.spec.js --reporter=list",
+    "test:contact": "npx playwright test tests/high/07-contact-us.spec.js --reporter=list",
+    "test:forms": "npx playwright test tests/high/04-schedule-demo.spec.js tests/high/05-user-survey.spec.js tests/high/06-affiliate-survey.spec.js tests/high/07-contact-us.spec.js --reporter=list",
+    "test:health": "npx playwright test tests/smoke/site-health.spec.js",
+    "test:health:staging": "TEST_ENV=staging npx playwright test tests/smoke/site-health.spec.js",
+    "test:health:prod": "TEST_ENV=production npx playwright test tests/smoke/site-health.spec.js",
+    "test:pricing": "npx playwright test tests/smoke/pricing-and-auth.spec.js",
+    "test:pricing:staging": "TEST_ENV=staging npx playwright test tests/smoke/pricing-and-auth.spec.js",
+    "test:pricing:prod": "TEST_ENV=production npx playwright test tests/smoke/pricing-and-auth.spec.js",
+    "test:smoke:report": "npx playwright test tests/smoke --reporter=list,./reporters/smoke-report.js",
+    "test:smoke:report:staging": "TEST_ENV=staging npx playwright test tests/smoke --reporter=list,./reporters/smoke-report.js",
+    "test:smoke:report:prod": "TEST_ENV=production npx playwright test tests/smoke --reporter=list,./reporters/smoke-report.js",
+    "test:forms:staging": "TEST_ENV=staging npx playwright test tests/smoke/forms-submit.spec.js",
+    "test:scheduled:prod": "TEST_ENV=production npx playwright test tests/critical tests/smoke tests/high/01-features-pages.spec.js tests/high/02-cta-buttons.spec.js tests/high/03-contact-form.spec.js tests/high/07-contact-us.spec.js tests/medium/02-footer-links.spec.js --project=chromium --reporter=list",
+    "test:crossbrowser": "TEST_ENV=production npx playwright test tests/smoke/site-health.spec.js --project=chromium --project=firefox --project=webkit --reporter=list"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "dotenv": "^17.4.2"
+  }
+}
