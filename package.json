@@ -97,7 +97,12 @@
     "test:internal:refresh:slow": "RUN_SLOW=1 playwright test --config=playwright-internal-dashboard.config.js",
     "test:ledgerport": "playwright test --config=playwright-ledgerport.config.js",
     "test:ledgerport:smoke": "playwright test tests/ledgerport-regression/specs/smoke/ --config=playwright-ledgerport.config.js",
-    "test:ledgerport:regression": "playwright test tests/ledgerport-regression/specs/regression/ --config=playwright-ledgerport.config.js"
+    "test:ledgerport:regression": "playwright test tests/ledgerport-regression/specs/regression/ --config=playwright-ledgerport.config.js",
+    "test:mcp:selftest": "playwright test -c playwright-mcp.config.js --grep @selftest",
+    "test:mcp:build": "playwright test -c playwright-mcp.config.js --grep @build",
+    "test:mcp:dry": "PE_MCP_ALLOW_SEND=0 playwright test -c playwright-mcp.config.js tests/pushengage-mcp/01-custom-audience.spec.js",
+    "test:mcp:live": "PE_MCP_ALLOW_SEND=1 playwright test -c playwright-mcp.config.js tests/pushengage-mcp/01-custom-audience.spec.js",
+    "test:mcp:b9": "PE_MCP_ALLOW_SEND=1 playwright test -c playwright-mcp.config.js --grep B9"
   },
   "keywords": [
     "playwright",
@@ -123,6 +128,7 @@
   "homepage": "https://github.com/KulvinderGosal/QAAutomations#readme",
   "license": "MIT",
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@playwright/test": "^1.58.2",
     "dotenv": "^16.0.0",
     "html-pdf-node": "^1.0.8",
