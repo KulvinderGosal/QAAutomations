@@ -17,6 +17,8 @@ const MODEL = process.env.PE_MCP_MODEL || 'claude-opus-5-5';
 const EFFORT = process.env.PE_MCP_EFFORT || 'medium';
 const MAX_TURNS = Number(process.env.PE_MCP_MAX_TURNS || 10);
 const USE_FALLBACKS = process.env.PE_MCP_FALLBACKS !== 'off';
+const SITE_ID = process.env.PE_MCP_SITE_ID || '';
+const SITE_NAME = process.env.PE_MCP_SITE_NAME || '';
 
 const SYSTEM = [
   'You are operating a PushEngage TEST site through its MCP tools, as part of an automated QA run.',
@@ -24,7 +26,21 @@ const SYSTEM = [
   'Use names and values exactly as the user writes them unless the user tells you to look them up.',
   'If a tool returns an error, do not retry with different values; stop and report the error text.',
   'When you are done, reply with one short paragraph saying what you did and the notification id if one was created.',
-].join('\n');
+  SITE_ID ? `Operate only on PushEngage site ${SITE_ID}${SITE_NAME ? ` ("${SITE_NAME}")` : ''}; if a tool takes a site id, pass ${SITE_ID}.` : '',
+].filter(Boolean).join('\n');
+
+/** A site id in the arguments that is not the locked test site, or null. */
+function wrongSite(args) {
+  if (!SITE_ID || !args || typeof args !== 'object') return null;
+  for (const [k, v] of Object.entries(args)) {
+    if (/^site_?id$/i.test(k) && String(v) !== SITE_ID) return String(v);
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      const nested = wrongSite(v);
+      if (nested) return nested;
+    }
+  }
+  return null;
+}
 
 function allowSend() {
   return process.env.PE_MCP_ALLOW_SEND === '1';
@@ -84,7 +100,12 @@ async function runAgent(session, prompt) {
     const results = [];
     for (const block of response.content.filter((b) => b.type === 'tool_use')) {
       const record = { name: block.name, args: block.input, isError: false, text: '', blocked: null, raw: null };
-      if (session.isSendTool(block.name) && !allowSend()) {
+      const otherSite = wrongSite(block.input);
+      if (otherSite) {
+        record.blocked = 'wrong-site';
+        record.isError = true;
+        record.text = `QA harness: blocked, site ${otherSite} is not the test site ${SITE_ID}.`;
+      } else if (session.isSendTool(block.name) && !allowSend()) {
         record.blocked = 'dry-run';
         record.isError = true;
         record.text = 'QA harness dry run: this send was not executed (PE_MCP_ALLOW_SEND is not 1).';
@@ -118,4 +139,4 @@ async function runAgent(session, prompt) {
   return { finalText, toolCalls, stopReason, turns: turns + 1, model: MODEL };
 }
 
-module.exports = { runAgent, allowSend, MODEL };
+module.exports = { runAgent, allowSend, wrongSite, MODEL };

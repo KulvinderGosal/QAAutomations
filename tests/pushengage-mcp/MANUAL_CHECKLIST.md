@@ -9,7 +9,13 @@ Only A1, B6 and B9 are named in the Asana brief. Rename the others to match the 
 
 ### 1. Get from the developer
 - [ ] The PR #287 build of the PushEngage MCP, plus install steps
-- [ ] A **test site** and its API key. Never use a real customer site: every send is a real push.
+- [ ] The API key for the test site below
+
+**Test site: QA Staging (site ID 51041)** on the staging dashboard, https://staging-app-dashboard2.pushengage.com.
+Use only this site. Every send is a real push.
+
+- [ ] Before the first send, ask Claude: *"Which PushEngage site are you connected to?"* It must say **QA Staging / 51041**.
+  If it names any other site, stop: the API key is for the wrong site.
 
 ### 2. Confirm you are on the new build
 In Claude Desktop, type:
@@ -21,9 +27,9 @@ In Claude Desktop, type:
 If it's missing, you're on an old cached build. Ask the developer to bump the version and reinstall
 (the cache clear is `rm -rf ~/.npm/_npx`). **Don't continue until this passes.** On an old build every case looks like "the feature is missing".
 
-### 3. Prepare the test site, then write the names here
+### 3. Prepare QA Staging (51041), then write the names here
 
-| What | Name or value on your test site |
+| What | Name or value on QA Staging |
 |---|---|
 | Active segment 1 | |
 | Active segment 2 | |
@@ -40,7 +46,7 @@ In the prompts below, replace anything in `<angle brackets>` with these values.
 
 ### 4. How to check a result
 **Don't trust Claude's reply.** "Sent to Sports Fans" isn't proof. For every send:
-1. Open the PushEngage dashboard and go to **Push Broadcasts**
+1. Open the staging dashboard, switch to the **QA Staging (51041)** site, and go to **Push Broadcasts**
 2. Find the notification by its title (`QA-287 <case>`)
 3. Open it and look at the **Audience** section
 4. Take a screenshot if anything looks wrong

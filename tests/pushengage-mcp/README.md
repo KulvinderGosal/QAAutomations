@@ -29,7 +29,8 @@ harness verifies here ────────────────┘  (list
    - `PE_MCP_COMMAND` / `PE_MCP_ARGS`: how to start the build. For example:
      - `PE_MCP_COMMAND=node` and `PE_MCP_ARGS=/path/to/pushengage-mcp/dist/index.js`
      - `PE_MCP_COMMAND=npx` and `PE_MCP_ARGS=-y /path/to/pushengage-mcp-0.4.0-qa.3.tgz`
-   - The MCP's own API-key variable, for the **test site only**. The whole `.env` is passed to the server.
+   - The MCP's own API-key variable, for the **QA Staging site (51041)** only. The whole `.env` is passed to the server.
+   - `PE_MCP_SITE_ID=51041` and `PE_MCP_SITE_NAME=QA Staging`. Claude is told to use only this site, and any tool call naming another site id is blocked.
    - `ANTHROPIC_API_KEY`, or be logged in with `ant auth login`.
    - Fixtures: `PE_MCP_SEGMENT_1`, `PE_MCP_SEGMENT_2`, `PE_MCP_PAUSED_SEGMENT`, `PE_MCP_ATTRIBUTE_NAME`,
      `PE_MCP_ATTRIBUTE_VALUE`, `PE_MCP_COUNTRY_1`, `PE_MCP_COUNTRY_2`, and optionally `PE_MCP_AUDIENCE_GROUP`.
