@@ -30,7 +30,7 @@ harness verifies here ────────────────┘  (list
 3. Fill the `PushEngage MCP QA` block in `.env` (template in `.env.example`):
    - `PE_MCP_COMMAND` / `PE_MCP_ARGS`: how to start the build. For example:
      - `PE_MCP_COMMAND=node` and `PE_MCP_ARGS=/path/to/pushengage-mcp/dist/index.js`
-     - `PE_MCP_COMMAND=npx` and `PE_MCP_ARGS=-y /path/to/pushengage-mcp-0.4.0-qa.3.tgz`
+     - `PE_MCP_COMMAND=npx` and `PE_MCP_ARGS=-y --package=/path/to/pushengage-mcp-1.1.0.tgz pushengage-mcp` (a bare `npx file.tgz` tries to execute the file)
    - Staging connection, using the same values as in Claude Desktop (see `MANUAL_CHECKLIST.md` step 1):
      `PUSHENGAGE_DASHBOARD_URL`, `PUSHENGAGE_API_URL` and `PE_MCP_CONFIG_PATH`. The whole `.env` is passed to the server.
    - **Log in once in Claude Desktop first** ("Log me into PushEngage", then "Use site 51041"). The harness reuses that

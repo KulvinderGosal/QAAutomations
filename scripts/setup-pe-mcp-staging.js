@@ -71,9 +71,12 @@ function main() {
   }
 
   cfg.mcpServers = cfg.mcpServers || {};
+  // A local .tgz or folder must go through --package; `npx <file>` tries to execute the file itself.
+  const isLocal = /^(\/|\.|~|[A-Za-z]:\\)/.test(build) || /\.tgz$/.test(build);
+  const npxArgs = isLocal ? ['-y', `--package=${path.resolve(build)}`, 'pushengage-mcp'] : ['-y', build];
   cfg.mcpServers['pushengage-staging'] = {
     command: 'npx',
-    args: ['-y', build],
+    args: npxArgs,
     env: {
       PUSHENGAGE_DASHBOARD_URL: DASHBOARD_URL,
       PUSHENGAGE_API_URL: apiUrl,
@@ -97,7 +100,7 @@ function main() {
   const repoEnv = path.join(__dirname, '..', '.env');
   upsertEnvFile(repoEnv, {
     PE_MCP_COMMAND: 'npx',
-    PE_MCP_ARGS: `-y ${build}`,
+    PE_MCP_ARGS: npxArgs.join(' '),
     PUSHENGAGE_DASHBOARD_URL: DASHBOARD_URL,
     PUSHENGAGE_API_URL: apiUrl,
     PE_MCP_CONFIG_PATH: tokenFile,

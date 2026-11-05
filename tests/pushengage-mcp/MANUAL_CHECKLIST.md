@@ -24,7 +24,7 @@ Then:
      "mcpServers": {
        "pushengage-staging": {
          "command": "npx",
-         "args": ["-y", "<PR 287 build, e.g. @pushengage/mcp@x.y.z-qa.1 or /path/to/file.tgz>"],
+         "args": ["-y", "--package=/full/path/to/pushengage-mcp-1.1.0.tgz", "pushengage-mcp"],
          "env": {
            "PUSHENGAGE_DASHBOARD_URL": "https://staging-app-dashboard2.pushengage.com",
            "PUSHENGAGE_API_URL": "<staging API URL from the developer>",
