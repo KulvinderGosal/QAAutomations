@@ -1,5 +1,7 @@
 # PushEngage MCP QA: custom-audience targeting (PR #287)
 
+Current test site: **PushEngage Playground (76524) on production**. Staging lacked the routes this build needs.
+
 Automates the Asana task "QA: Custom-audience targeting in the MCP" for
 awesomemotive/pushengage-sdks#287. **Run it locally, against a PushEngage TEST site.**
 

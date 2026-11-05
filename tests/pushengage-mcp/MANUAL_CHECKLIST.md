@@ -42,18 +42,18 @@ Then:
 ### 2. Log in, pick the site, and confirm the build
 In a new Claude Desktop chat:
 1. **"Log me into PushEngage."** A browser tab opens. Log in to the **staging** dashboard and click **Authorize**.
-2. **"Show my PushEngage sites."** Then **"Use site 51041."**
+2. **"Show my PushEngage sites."** Then **"Use site 76524."**
 3. **"Show my PushEngage auth status."**
-   - [ ] It says you're logged in and the current site is **QA Staging (51041)**
+   - [ ] It says you're logged in and the current site is **PushEngage Playground (76524)**
 4. **"List your PushEngage tools."**
    - [ ] The list includes **`pushengage_list_audience_filter_values`**
 
 If the tool is missing, you're on the old build. Recheck the `args` line, clear the cache (`rm -rf ~/.npm/_npx`), and restart Claude Desktop.
 **Don't continue until both checks pass.** Every send is a real push to QA Staging.
 
-### 3. Prepare QA Staging (51041), then write the names here
+### 3. Prepare PushEngage Playground (76524), then write the names here
 
-| What | Name or value on QA Staging |
+| What | Name or value on PushEngage Playground |
 |---|---|
 | Active segment 1 | |
 | Active segment 2 | |
@@ -70,7 +70,7 @@ In the prompts below, replace anything in `<angle brackets>` with these values.
 
 ### 4. How to check a result
 **Don't trust Claude's reply.** "Sent to Sports Fans" isn't proof. For every send:
-1. Open the staging dashboard, switch to the **QA Staging (51041)** site, and go to **Push Broadcasts**
+1. Open https://app.pushengage.com, switch to the **PushEngage Playground (76524)** site, and go to **Push Broadcasts**
 2. Find the notification by its title (`QA-287 <case>`)
 3. Open it and look at the **Audience** section
 4. Take a screenshot if anything looks wrong
