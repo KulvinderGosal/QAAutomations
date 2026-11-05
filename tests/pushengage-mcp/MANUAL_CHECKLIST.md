@@ -157,14 +157,14 @@ Same prompt start as Part 3, ending with *"Use the values exactly as written; do
 |---|---|---|
 | B1 | subscribers whose attribute "qa_no_such_attribute_287" equals "yes" | |
 | B2 | subscribers on "smartfridge" devices | |
-| B3 | subscribers who subscribed after the date "2026-13-45" | |
-| B4 | subscribers who clicked at least -3 notifications | |
+| B3 | subscribers who subscribed after the date "2026-13-45" | *Offline: 1.1.0 sends this (finding 2). Record what the API does.* |
+| B4 | subscribers who clicked at least -3 notifications | *Offline: 1.1.0 sends this, and it matches everyone (finding 3).* |
 
 ### Record only (no pass/fail, write down what happened)
 
 | Case | Add to the prompt | What happened |
 |---|---|---|
-| B5 | subscribers in the segment "`<PAUSED SEGMENT>`" | Refused? Sent? What does Audience show? |
+| B5 | subscribers in the segment "`<PAUSED SEGMENT>`" | **Suspected bug (offline finding 1):** 1.1.0 accepts paused segments. If it sends, open the notification. Audience showing **All Subscribers** → escalate like B9. |
 | B6 | subscribers located in "`<MISSPELLED COUNTRY>`" (e.g. "Indai") | **Known gap, don't file as a new bug.** Expected: it sends and reaches nobody. Note the actual behaviour. |
 
 ---

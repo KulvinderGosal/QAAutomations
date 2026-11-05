@@ -103,7 +103,8 @@
     "test:mcp:dry": "PE_MCP_ALLOW_SEND=0 playwright test -c playwright-mcp.config.js tests/pushengage-mcp/01-custom-audience.spec.js",
     "test:mcp:live": "PE_MCP_ALLOW_SEND=1 playwright test -c playwright-mcp.config.js tests/pushengage-mcp/01-custom-audience.spec.js",
     "test:mcp:b9": "PE_MCP_ALLOW_SEND=1 playwright test -c playwright-mcp.config.js --grep B9",
-    "mcp:setup:staging": "node scripts/setup-pe-mcp-staging.js"
+    "mcp:setup:staging": "node scripts/setup-pe-mcp-staging.js",
+    "test:mcp:offline": "playwright test -c playwright-mcp.config.js tests/pushengage-mcp/10-real-build-offline.spec.js"
   },
   "keywords": [
     "playwright",

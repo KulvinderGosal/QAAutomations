@@ -41,6 +41,14 @@ harness verifies here ────────────────┘  (list
      `PE_MCP_ATTRIBUTE_VALUE`, `PE_MCP_COUNTRY_1`, `PE_MCP_COUNTRY_2`, and optionally `PE_MCP_AUDIENCE_GROUP`.
      A case whose fixtures are unset is skipped and the report says which ones are missing.
 
+## Offline test of a real build (no login)
+
+```bash
+PE_MCP_DIST=/path/to/extracted/package/dist/index.js npm run test:mcp:offline
+```
+This runs the real MCP against `fake/mock-pushengage-api.js` and checks what it would send.
+Results for 1.1.0 are in `FINDINGS-1.1.0.md`.
+
 ## Run, in this order
 
 ```bash

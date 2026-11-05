@@ -29,6 +29,7 @@ const CASES = require('./cases');
 
 const REPORT_DIR = path.join(__dirname, '..', '..', 'test-results', 'pushengage-mcp');
 // Append-only: Playwright restarts the worker after a failure, so in-memory state would be lost.
+const segmentIds = new Map();
 const JSONL = path.join(REPORT_DIR, `mcp-287-${fixtures.runId}.jsonl`);
 
 test.describe('PushEngage MCP: custom-audience targeting (PR #287)', () => {
@@ -42,6 +43,13 @@ test.describe('PushEngage MCP: custom-audience targeting (PR #287)', () => {
     // Same check as the brief's "confirm the build first": a cached build lacks these.
     expect(session.toolNames(), 'stale MCP build? (rm -rf ~/.npm/_npx and repack)').toContain(FILTER_VALUES_TOOL);
     expect(session.sendTools().length, 'no tool accepts subscriber_filter; stale build?').toBeGreaterThan(0);
+    // Saved criteria store segment ids, not names: map names to ids for the read-back check.
+    if (session.getTool('pushengage_list_segments')) {
+      const res = await session.call('pushengage_list_segments', { limit: 100 });
+      for (const [k, v, parent] of walkPairs(resultJson(res))) {
+        if (k === 'segment_name' && parent && parent.segment_id !== undefined) segmentIds.set(String(v).toLowerCase(), String(parent.segment_id));
+      }
+    }
   });
 
   test.afterAll(async () => {
@@ -187,10 +195,25 @@ function checkLiveSend(c, sendCalls, newIds, saved) {
 
 function expectAudience(c, json, label) {
   if (c.audienceTokens) {
-    expect(missingTokens(json, c.audienceTokens(fixtures)), `values missing from ${label}`).toEqual([]);
+    // A token counts as present if it, or the segment id it names, appears.
+    const missing = missingTokens(json, c.audienceTokens(fixtures)).filter((t) => {
+      const id = segmentIds.get(String(t).toLowerCase());
+      return !(id && JSON.stringify(json).includes(id));
+    });
+    expect(missing, `values missing from ${label}`).toEqual([]);
   }
   if (c.audiencePattern) {
     expect(JSON.stringify(json), `${label} does not look like ${c.audiencePattern}`).toMatch(c.audiencePattern);
+  }
+}
+
+function* walkPairs(value) {
+  if (Array.isArray(value)) for (const v of value) yield* walkPairs(v);
+  else if (value && typeof value === 'object') {
+    for (const [k, v] of Object.entries(value)) {
+      yield [k, v, value];
+      yield* walkPairs(v);
+    }
   }
 }
 
