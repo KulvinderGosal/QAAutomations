@@ -136,7 +136,8 @@ function checkRefuse(c, sendCalls, newIds, saved, listDiffed) {
     `inconclusive: "${bad}" never reached a send tool (calls: ${sendCalls.map((t) => t.name).join(', ') || 'none'})`,
   ).toBeGreaterThan(0);
 
-  const toEveryone = saved.filter((s) => s.json && looksLikeAllSubscribers(s.json));
+  // In PushEngage's list output an All Subscribers send has no `criteria` at all.
+  const toEveryone = saved.filter((s) => s.json && (looksLikeAllSubscribers(s.json) || !hasAudienceData(s.json)));
   if (toEveryone.length) {
     throw new Error(
       `ESCALATE ${c.id}: notification ${toEveryone.map((s) => s.id).join(', ')} was created and targets ALL SUBSCRIBERS. ` +
@@ -173,7 +174,7 @@ function checkLiveSend(c, sendCalls, newIds, saved) {
   expect(newIds.length, `expected exactly one new notification; send results: ${sendCalls.map((t) => t.text).join(' | ')}`).toBe(1);
   const [n] = saved;
   if (!n.readable) {
-    throw new Error(`no get-notification tool in this build; open notification ${n.id} in the dashboard and check its Audience.`);
+    throw new Error(`could not read notification ${n.id} back through the MCP; open it in the dashboard and check its Audience.`);
   }
   if (c.kind === 'all') {
     expect(looksLikeAllSubscribers(n.json) || !hasAudienceData(n.json), 'regression send did not go to All Subscribers').toBe(true);

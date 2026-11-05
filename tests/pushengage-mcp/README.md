@@ -17,6 +17,8 @@ harness verifies here ────────────────┘  (list
   Send tools run only with `PE_MCP_ALLOW_SEND=1`. Everything else (create, update, delete, pause) is blocked.
 - After each case the harness diffs the notification list (before and after), reads each new
   notification back through the MCP, and checks its saved audience.
+- The audience is read back from `pushengage_list_notifications`, whose entries carry `criteria`.
+  An entry with no criteria means All Subscribers.
 - Tool names are discovered from the server. A send tool is any tool whose schema has
   `subscriber_filter`. Run the build check to see what was detected.
 
@@ -29,7 +31,10 @@ harness verifies here ────────────────┘  (list
    - `PE_MCP_COMMAND` / `PE_MCP_ARGS`: how to start the build. For example:
      - `PE_MCP_COMMAND=node` and `PE_MCP_ARGS=/path/to/pushengage-mcp/dist/index.js`
      - `PE_MCP_COMMAND=npx` and `PE_MCP_ARGS=-y /path/to/pushengage-mcp-0.4.0-qa.3.tgz`
-   - The MCP's own API-key variable, for the **QA Staging site (51041)** only. The whole `.env` is passed to the server.
+   - Staging connection, using the same values as in Claude Desktop (see `MANUAL_CHECKLIST.md` step 1):
+     `PUSHENGAGE_DASHBOARD_URL`, `PUSHENGAGE_API_URL` and `PE_MCP_CONFIG_PATH`. The whole `.env` is passed to the server.
+   - **Log in once in Claude Desktop first** ("Log me into PushEngage", then "Use site 51041"). The harness reuses that
+     token file through `PE_MCP_CONFIG_PATH`. It blocks the login and site-switch tools itself.
    - `PE_MCP_SITE_ID=51041` and `PE_MCP_SITE_NAME=QA Staging`. Claude is told to use only this site, and any tool call naming another site id is blocked.
    - `ANTHROPIC_API_KEY`, or be logged in with `ant auth login`.
    - Fixtures: `PE_MCP_SEGMENT_1`, `PE_MCP_SEGMENT_2`, `PE_MCP_PAUSED_SEGMENT`, `PE_MCP_ATTRIBUTE_NAME`,

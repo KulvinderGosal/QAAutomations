@@ -86,6 +86,17 @@ function firstArrayOfObjects(json) {
   return null;
 }
 
+/** The object in a list result whose notification id equals `id`, or undefined. */
+function findNotification(json, id) {
+  for (const [k, v, parent] of walk(json)) {
+    if (NOTIFICATION_ID_KEY.test(k) && String(v) === String(id)) return parent;
+  }
+  for (const [k, v, parent] of walk(json)) {
+    if (k === 'id' && String(v) === String(id)) return parent;
+  }
+  return undefined;
+}
+
 const AUDIENCE_KEY = /audience|send_?to|target|segment|filter|criteria|subscriber/i;
 
 /** True when the notification JSON carries some audience/targeting data at all. */
@@ -130,6 +141,7 @@ module.exports = {
   resultText,
   resultJson,
   extractNotificationIds,
+  findNotification,
   hasAudienceData,
   looksLikeAllSubscribers,
   missingTokens,

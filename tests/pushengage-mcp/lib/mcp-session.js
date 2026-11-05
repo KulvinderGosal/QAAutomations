@@ -13,12 +13,12 @@
  */
 const { Client } = require('@modelcontextprotocol/sdk/client/index.js');
 const { StdioClientTransport } = require('@modelcontextprotocol/sdk/client/stdio.js');
-const { resultJson, extractNotificationIds } = require('./checks');
+const { resultJson, extractNotificationIds, findNotification } = require('./checks');
 
 const FILTER_VALUES_TOOL = 'pushengage_list_audience_filter_values';
 
 /** Tools the agent may call without PE_MCP_ALLOW_SEND. Anything else is blocked by the harness. */
-const READ_ONLY_NAME = /(^|_)(list|get|search|describe|fetch|read|count|stats?)(_|$)/i;
+const READ_ONLY_NAME = /(^|_)(list|get|search|describe|fetch|read|count|stats?|status)(_|$)/i;
 
 function parseArgs(raw) {
   if (!raw) return [];
@@ -114,15 +114,25 @@ class McpSession {
     return extractNotificationIds(resultJson(res));
   }
 
-  /** Read one notification back through the MCP. Returns { json, raw } or null when no get tool exists. */
+  /**
+   * Read one notification back through the MCP. Returns { json, raw, via } or null when it can't.
+   * Uses a get-notification tool when there is one; otherwise finds the entry in the list tool's
+   * output (pushengage_list_notifications returns each notification's `criteria`).
+   */
   async getNotification(id) {
     const tool = this.getNotificationTool();
-    if (!tool) return null;
+    if (!tool) {
+      const list = this.listNotificationsTool();
+      if (!list) return null;
+      const raw = await this.call(list.name, listArgs(list));
+      const json = findNotification(resultJson(raw), id);
+      return json ? { json, raw, via: list.name } : null;
+    }
     const [key] = requiredKeys(tool);
     const type = tool.inputSchema.properties?.[key]?.type;
     const value = type === 'number' || type === 'integer' ? Number(id) : String(id);
     const raw = await this.call(tool.name, { [key]: value });
-    return { json: resultJson(raw), raw };
+    return { json: resultJson(raw), raw, via: tool.name };
   }
 }
 

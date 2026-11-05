@@ -16,7 +16,8 @@ const COUNTRIES = ['US', 'IN'];
 const notifications = [];
 let nextId = 1000;
 
-const tools = [
+const NO_GET = process.env.FAKE_NO_GET === '1';
+const allTools = [
   {
     name: 'pushengage_send_notification',
     description: 'Send a push notification. Omit subscriber_filter to send to all subscribers.',
@@ -59,6 +60,8 @@ const tools = [
   },
 ];
 
+const tools = NO_GET ? allTools.filter((t) => t.name !== 'pushengage_get_notification') : allTools;
+
 const text = (obj, isError = false) => ({ content: [{ type: 'text', text: JSON.stringify(obj) }], isError });
 
 function send(args) {
@@ -84,7 +87,11 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     case 'pushengage_send_notification':
       return send(args);
     case 'pushengage_list_notifications':
-      return text({ notifications: notifications.slice(0, args.limit || 20).map(({ notification_id, title }) => ({ notification_id, title })) });
+      return text({
+        notifications: notifications
+          .slice(0, args.limit || 20)
+          .map((n) => (NO_GET ? { notification_id: n.notification_id, title: n.title, criteria: n.audience.criteria } : { notification_id: n.notification_id, title: n.title })),
+      });
     case 'pushengage_get_notification': {
       const n = notifications.find((x) => x.notification_id === Number(args.notification_id));
       return n ? text(n) : text({ error: 'not found' }, true);

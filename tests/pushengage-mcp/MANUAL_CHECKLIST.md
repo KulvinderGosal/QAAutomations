@@ -7,25 +7,49 @@ Only A1, B6 and B9 are named in the Asana brief. Rename the others to match the 
 
 ## Before you start
 
-### 1. Get from the developer
-- [ ] The PR #287 build of the PushEngage MCP, plus install steps
-- [ ] The API key for the test site below
+### 1. Install the MCP in Claude Desktop, pointed at staging
 
-**Test site: QA Staging (site ID 51041)** on the staging dashboard, https://staging-app-dashboard2.pushengage.com.
-Use only this site. Every send is a real push.
+> The public `@pushengage/mcp` (1.0.0) does **not** contain PR #287. We checked: it has no
+> `pushengage_list_audience_filter_values` and no `subscriber_filter`. You need the PR build from the developer.
 
-- [ ] Before the first send, ask Claude: *"Which PushEngage site are you connected to?"* It must say **QA Staging / 51041**.
-  If it names any other site, stop: the API key is for the wrong site.
+Ask the developer for two values:
+- [ ] **PR build:** the package version or `.tgz` file for PR #287
+- [ ] **Staging API URL:** the value for `PUSHENGAGE_API_URL` (production uses `https://dashboard-public-api.pushengage.com`)
 
-### 2. Confirm you are on the new build
-In Claude Desktop, type:
+Then:
+1. Install **Node.js 18+** from https://nodejs.org
+2. Open Claude Desktop, go to **Settings → Developer → Edit Config**, and add this. Replace the three `<...>` values.
+   ```json
+   {
+     "mcpServers": {
+       "pushengage-staging": {
+         "command": "npx",
+         "args": ["-y", "<PR 287 build, e.g. @pushengage/mcp@x.y.z-qa.1 or /path/to/file.tgz>"],
+         "env": {
+           "PUSHENGAGE_DASHBOARD_URL": "https://staging-app-dashboard2.pushengage.com",
+           "PUSHENGAGE_API_URL": "<staging API URL from the developer>",
+           "PE_MCP_CONFIG_PATH": "/Users/<you>/.pushengage/mcp-staging.json",
+           "PE_MCP_CLIENT_NAME": "Claude Desktop (QA Staging)"
+         }
+       }
+     }
+   }
+   ```
+   `PE_MCP_CONFIG_PATH` keeps the staging login separate from any production login. It must be a full path, with no `~`.
+3. Quit Claude Desktop completely and reopen it.
+4. Clear any cached old build first: run `rm -rf ~/.npm/_npx` in Terminal.
 
-> List your PushEngage tools.
+### 2. Log in, pick the site, and confirm the build
+In a new Claude Desktop chat:
+1. **"Log me into PushEngage."** A browser tab opens. Log in to the **staging** dashboard and click **Authorize**.
+2. **"Show my PushEngage sites."** Then **"Use site 51041."**
+3. **"Show my PushEngage auth status."**
+   - [ ] It says you're logged in and the current site is **QA Staging (51041)**
+4. **"List your PushEngage tools."**
+   - [ ] The list includes **`pushengage_list_audience_filter_values`**
 
-- [ ] The list includes **`pushengage_list_audience_filter_values`**
-
-If it's missing, you're on an old cached build. Ask the developer to bump the version and reinstall
-(the cache clear is `rm -rf ~/.npm/_npx`). **Don't continue until this passes.** On an old build every case looks like "the feature is missing".
+If the tool is missing, you're on the old build. Recheck the `args` line, clear the cache (`rm -rf ~/.npm/_npx`), and restart Claude Desktop.
+**Don't continue until both checks pass.** Every send is a real push to QA Staging.
 
 ### 3. Prepare QA Staging (51041), then write the names here
 

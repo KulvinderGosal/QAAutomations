@@ -81,6 +81,22 @@ test.describe('PushEngage MCP harness self-test @selftest', () => {
     }
   });
 
+  test('no get tool (as in @pushengage/mcp 1.0.0): audience is read from the list output', async () => {
+    const s = await fakeSession({ FAKE_NO_GET: '1' });
+    try {
+      expect(s.getNotificationTool()).toBeUndefined();
+      const targeted = await sendAndDiff(s, { ...base, subscriber_filter: { segments: ['Tech News'] } });
+      expect(targeted.ids).toHaveLength(1);
+      expect(hasAudienceData(targeted.saved[0])).toBe(true);
+      expect(missingTokens(targeted.saved[0], ['Tech News'])).toEqual([]);
+      // All Subscribers in list output = no criteria at all
+      const all = await sendAndDiff(s, { ...base });
+      expect(hasAudienceData(all.saved[0])).toBe(false);
+    } finally {
+      await s.close();
+    }
+  });
+
   test('checks: id extraction and All-Subscribers detection on common shapes', () => {
     expect([...extractNotificationIds({ notification_id: 7 })]).toEqual(['7']);
     expect([...extractNotificationIds({ data: [{ id: 'a' }, { id: 'b' }] })]).toEqual(['a', 'b']);
